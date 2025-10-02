@@ -9,12 +9,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Menu Manager</title>
+        <title>Manager Menu</title>
     </head>
     <body>
         <h1>Menu Manager</h1>
         <form action="ManageDishesServlet" method="get">
-            <button type="submit">Manage all Dish</button>
+            <button type="submit">Manage Dishes</button>
         </form>
     </body>
 </html>
