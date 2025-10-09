@@ -11,6 +11,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Manage Dishes</title>
+        <link rel="stylesheet" href="css/IManageDishes.css">
     </head>
     <body>
         <h1>Manage All Dishes</h1>

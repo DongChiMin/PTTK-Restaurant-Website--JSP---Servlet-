@@ -13,5 +13,10 @@
     </head>
     <body>
         <h1>Menu Customer</h1>
+        <form action = "SelectAvailableTableServlet" method = "get">
+            <button type="submit">
+                Book table
+            </button>
+        </form>
     </body>
 </html>
