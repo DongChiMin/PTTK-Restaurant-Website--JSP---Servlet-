@@ -27,6 +27,13 @@
             if (phoneNumber == null) {
                 phoneNumber = "";
             }
+            String email = customer.getEmail();
+            String hiddenEmail = "";
+            if (customer!= null && email != null && !email.isEmpty()) {
+                
+                int index = email.indexOf('@');
+                hiddenEmail = email.substring(0, 1) + "***" + email.charAt(index - 1) + email.substring(index);
+            }
         %>
 
         <form id="reservationForm" action = "CreateReservationServlet" method = "post">
@@ -35,7 +42,7 @@
             <input hidden name="bookingDate" value="<%=bookingDate%>">
             <label>Phone number (10 digits):</label><br>
             <input type="text" name="phoneNumber" pattern="[0-9]{10}" value="<%=phoneNumber%>" placeholder="e.g., 0981234567"
-                   <%= (phoneNumber != null && !phoneNumber.isEmpty()) ? "readonly style='background-color: #e9ecef; cursor: not-allowed;'" : "" %>
+                   <%= (phoneNumber != null && !phoneNumber.isEmpty()) ? "readonly style='background-color: #e9ecef; cursor: not-allowed;'" : ""%>
                    required>
             <button type="submit" name="action" value="reset">Reset</button>
             <button type="submit" name="action" value="search">Search</button><br><br>
@@ -51,7 +58,7 @@
 
             <label>Email (optional)</label><br>
             <input type="text" name="email"><br><br>
-            
+
             <label>Date of Birth (optional)</label><br>
             <input type="text" name="dateOfBirth"><br><br>
             <%
@@ -61,10 +68,12 @@
             <input hidden name="customerId" value="<%= customer.getId()%>">
             <input type="text" name="name" value="<%=customer.getName()%>" readonly
                    style="background-color: #e9ecef; cursor: not-allowed;"><br><br>
-
+            <%
+            %>
             <label>Email (optional)</label><br>
-            <input type="text" name="email" value="<%=customer.getEmail()%>" readonly
+            <input type="text" name="email" value="<%=hiddenEmail%>" readonly
                    style="background-color: #e9ecef; cursor: not-allowed;"><br><br>
+
             <%
                     }
                 }
