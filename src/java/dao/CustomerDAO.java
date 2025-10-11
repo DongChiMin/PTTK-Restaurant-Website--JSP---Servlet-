@@ -40,7 +40,10 @@ public class CustomerDAO {
                 c.setName(rs.getString("name"));
                 c.setPhoneNumber(rs.getString("phoneNumber"));
                 c.setEmail(rs.getString("email"));
-                c.setDateOfBirth(LocalDate.parse(rs.getString("dateOfBirth")));
+                String dob = rs.getString("dateOfBirth");
+                if(dob != null){
+                    c.setDateOfBirth(LocalDate.parse(dob));
+                }
 
                 return c;
             } else {
