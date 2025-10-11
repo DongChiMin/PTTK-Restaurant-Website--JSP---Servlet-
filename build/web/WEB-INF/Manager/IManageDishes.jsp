@@ -50,11 +50,9 @@
             %>
 
         </table>
-            <a href = "MenuManagerServlet">
-                <span style="display:inline-block; padding:6px 12px; background:#ccc; border-radius:4px; cursor:pointer;">
-                    Cancel
-                </span>
-            </a>
+            <form action="MenuManagerServlet" method="get">
+                <button type="submit">Cancel</button>
+            </form>
             <form action="CreateNewDishServlet" method="get">
                 <button type="submit">Create new Dish</button>
             </form>

@@ -25,7 +25,7 @@ public class ManageDishesServlet extends HttpServlet {
         try {
             Dish[] dishes = dishDAO.getDishesList();
             request.setAttribute("dishes", dishes);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("IManageDishes.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/Manager/IManageDishes.jsp");
             dispatcher.forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(ManageDishesServlet.class.getName()).log(Level.SEVERE, null, ex);

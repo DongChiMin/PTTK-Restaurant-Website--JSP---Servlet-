@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Dish;
 
 @WebServlet(name = "CreateNewDishServlet", urlPatterns = {"/CreateNewDishServlet"})
 public class CreateNewDishServlet extends HttpServlet {
@@ -18,7 +19,7 @@ public class CreateNewDishServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/ICreateNewDish.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/Manager/ICreateNewDish.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -30,9 +31,12 @@ public class CreateNewDishServlet extends HttpServlet {
         String category = request.getParameter("category");
         float price = Float.parseFloat(priceStr);
         
+        //Đóng gói
+        Dish newDish = new Dish(0, name, description, price, category);
+        
         DishDAO dishDAO = new DishDAO();
         try {
-            dishDAO.submitNewDish(name, description, price, category);
+            dishDAO.submitNewDish(newDish);
             response.sendRedirect("ManageDishesServlet");
         } catch (SQLException ex) {
             //Chưa xử lý

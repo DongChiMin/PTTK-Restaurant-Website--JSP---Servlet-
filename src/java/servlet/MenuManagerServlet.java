@@ -14,7 +14,7 @@ public class MenuManagerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/IMenuManager.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/Manager/IMenuManager.jsp");
         dispatcher.forward(request, response);
     }
 }

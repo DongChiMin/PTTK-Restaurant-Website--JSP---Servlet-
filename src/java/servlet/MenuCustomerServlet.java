@@ -14,7 +14,7 @@ public class MenuCustomerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/IMenuCustomer.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/Customer/IMenuCustomer.jsp");
         dispatcher.forward(request, response);
     }
 }

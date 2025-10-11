@@ -12,8 +12,18 @@
         <title>Menu Customer</title>
     </head>
     <body>
+        <%
+            Boolean success = (Boolean) request.getAttribute("bookingTableSuccess");
+            if(success != null){
+                %>
+                <script>
+                    alert("Your table reservation has been successfully booked!");
+                </script>
+                <%
+            }
+        %>
         <h1>Menu Customer</h1>
-        <form action = "SelectAvailableTableServlet" method = "get">
+        <form action = "SelectAvailableTablesServlet" method = "get">
             <button type="submit">
                 Book table
             </button>

@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DishDAO {
+
+    public DishDAO() {
+    }
+    
     public Dish[] getDishesList() throws SQLException {
         String sql = "SELECT * FROM tblDish";
         
@@ -34,12 +38,11 @@ public class DishDAO {
         }
     }
     
-    public void submitNewDish(String name, String description, float Price, String category) throws SQLException{
+    public void submitNewDish(Dish newDish) throws SQLException{
         String sql = "INSERT INTO tblDish(name, description, price, category) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DBUtil.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            Dish newDish = new Dish(0, name, description, Price, category);
             
             ps.setString(1, newDish.getName());
             ps.setString(2, newDish.getDescription());

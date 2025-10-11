@@ -3,27 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/web/IMenuCustomer.jsp</file>
             <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/dao/ReservationDAO.java</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/servlet/ManageDishesServlet.java</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/servlet/MenuCustomerServlet.java</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/util/DBUtil.java</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/model/ReservationDetail.java</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/dao/DishDAO.java</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/servlet/SelectAvailableTableServlet.java</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/web/IManageDishes.jsp</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/web/index.jsp</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/dao/ReservationDetailDAO.java</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/servlet/CreateNewDishServlet.java</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/model/Table.java</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/model/Dish.java</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/web/IMenuManager.jsp</file>
             <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/dao/CustomerDAO.java</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/servlet/MenuManagerServlet.java</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/model/Reservation.java</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/dao/TableDAO.java</file>
+            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/web/WEB-INF/Customer/ICreateReservation.jsp</file>
             <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/servlet/CreateReservationServlet.java</file>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/src/java/model/Customer.java</file>
         </group>
     </open-files>
 </project-private>

@@ -31,12 +31,8 @@
                 <option value="dessert">Dessert</option>
             </select><br><br>
 
-            <a href = "ManageDishesServlet">
-                <span style="display:inline-block; padding:6px 12px; background:#ccc; border-radius:4px; cursor:pointer;">
-                    Cancel
-                </span>
-            </a>
-           
+            
+            <button type = "button" onclick="window.location.href='ManageDishesServlet'"> Cancel</button>           
             <button type = "submit">Confirm</button>
         </form>
 
