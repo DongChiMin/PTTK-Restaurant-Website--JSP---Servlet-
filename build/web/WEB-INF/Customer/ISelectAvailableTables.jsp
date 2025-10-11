@@ -37,8 +37,8 @@
         <h1>Select Tables</h1>
         <p>Booking Hours: 08:00 - 23:00</p>
         <form action="SelectAvailableTablesServlet" method="get">
-            <input type="date" id="date" name="date" value="<%=bookingDate%>" required>
-            <input type="time" id="time" name="time" value="<%=bookingTime%>" required>
+            <input type="date" id="date" name="bookingDate" value="<%=bookingDate%>" required>
+            <input type="time" id="time" name="bookingTime" value="<%=bookingTime%>" required>
             <button type="submit">Check table</button>
         </form>
 

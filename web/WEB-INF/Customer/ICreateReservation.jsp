@@ -46,11 +46,16 @@
             <input hidden name="endTime" value="<%= endTime%>">
             <input hidden name="bookingDate" value="<%=bookingDate%>">
             <label>Phone number (10 digits):</label><br>
-            <input required type="text" name="phoneNumber" pattern="[0-9]{10}" value="<%=phoneNumber%>" placeholder="e.g., 0981234567"
-                   <!--Không cho phép người dùng thay đổi sdt khi đã nhập, chỉ được dùng nút reset-->
-                   <%= (phoneNumber != null && !phoneNumber.isEmpty()) ? "readonly style='background-color: #e9ecef; cursor: not-allowed;'" : ""%>
-                   >
-                   <button type="submit" name="action" value="reset">Reset</button>
+            <input 
+                required 
+                type="text" 
+                name="phoneNumber" 
+                pattern="[0-9]{10}" 
+                value="<%= phoneNumber%>" 
+                placeholder="e.g., 0981234567"
+                <%= (phoneNumber != null && !phoneNumber.isEmpty()) ? "readonly style='background-color: #e9ecef; cursor: not-allowed;'" : ""%> 
+            />
+            <button type="submit" name="action" value="reset">Reset</button>
             <button type="submit" name="action" value="search">Search</button><br><br>
 
             <%
