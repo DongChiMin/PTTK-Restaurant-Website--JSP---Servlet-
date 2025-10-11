@@ -14,12 +14,12 @@
     <body>
         <%
             Boolean success = (Boolean) request.getAttribute("bookingTableSuccess");
-            if(success != null){
-                %>
-                <script>
-                    alert("Your table reservation has been successfully booked!");
-                </script>
-                <%
+            if (success != null) {
+        %>
+        <script>
+            alert("Your table reservation has been successfully booked!");
+        </script>
+        <%
             }
         %>
         <h1>Menu Customer</h1>

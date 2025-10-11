@@ -17,16 +17,17 @@
     </head>
     <body>
         <%
+            //Các biến cần để hiển thị trên giao diện 
             String bookingTime = (String) request.getAttribute("bookingTime");
             String endTime = (String) request.getAttribute("endTime");
             String bookingDate = (String) request.getAttribute("bookingDate");
             List<Table> tableList = (List<Table>) request.getAttribute("tableList");
             String[] selectedTableIds = (String[]) request.getAttribute("selectedTableIds");
- 
+
             if (bookingTime == null) {
                 bookingTime = "";
             }
-            if(endTime == null){
+            if (endTime == null) {
                 endTime = "";
             }
             if (bookingDate == null) {
@@ -67,7 +68,7 @@
                     <td><%= table.getLocation()%></td>
                     <td><%= table.getCapacity()%></td>
                     <td>
-                        <!--Kiểm tra xem bàn đã được chọn thì hiển thị đã chọn (Trường hợp quay lại từ trang confirm để chọn thêm bàn)-->
+                        <!--Kiểm tra xem bàn đã được chọn thì hiển thị checkbox đã chọn (Trường hợp quay lại từ trang confirm để chọn thêm bàn)-->
                         <%
                             boolean isSelected = false;
                             if (selectedTableIds != null) {
@@ -79,7 +80,7 @@
                                 }
                             }
                         %>
-                        <input type="checkbox" name="tableIds" value="<%= table.getId()%>" class="table-checkbox" <%= isSelected ? "checked" : "" %> >
+                        <input type="checkbox" name="tableIds" value="<%= table.getId()%>" class="table-checkbox" <%= isSelected ? "checked" : ""%> >
                     </td>
                 </tr>
 

@@ -32,14 +32,13 @@ public class CreateReservationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //Các biến cần để hiển thị trên giao diện
         String[] selectedTableIds = request.getParameterValues("tableIds");
         String bookingTime = request.getParameter("bookingTime");
         String endTime = request.getParameter("endTime");
         String bookingDate = request.getParameter("bookingDate");
         TableDAO tableDAO = new TableDAO();
         List<Table> tableList = new ArrayList<>();
-
-        //Set các dữ liệu cần thiết cho trang
         try {
             for (String tableId : selectedTableIds) {
                 Table t = tableDAO.getTableById(tableId);
@@ -50,12 +49,14 @@ public class CreateReservationServlet extends HttpServlet {
             Logger.getLogger(CreateReservationServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        //Set các dữ liệu cần thiết cho trang
         request.setAttribute("endTime", endTime);
         request.setAttribute("selectedTableList", tableList);
         request.setAttribute("bookingTime", bookingTime);
         request.setAttribute("bookingDate", bookingDate);
         request.setAttribute("phoneNumberEntered", false);
 
+        //Chuyển trang
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/Customer/ICreateReservation.jsp");
         dispatcher.forward(request, response);
 
@@ -63,32 +64,41 @@ public class CreateReservationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Các thông tin về đặt bàn
         String bookingTime = request.getParameter("bookingTime");
         String endTime = request.getParameter("endTime");
         String bookingDate = request.getParameter("bookingDate");
+        String[] selectedTableIds = request.getParameterValues("selectedTableIds");
+        String note = request.getParameter("note");
+        List<Table> selectedTableList = new ArrayList<>();
+
+        //Các thông tin về khách hàng
         String phoneNumber = request.getParameter("phoneNumber");
         String name = request.getParameter("name");
         String dateOfBirth = request.getParameter("dateOfBirth");
         String email = request.getParameter("email");
-        String[] selectedTableIds = request.getParameterValues("selectedTableIds");
-        String note = request.getParameter("note");
+        String customerIdString = request.getParameter("customerId");
+        //Nếu trong trang có thông tin customer rồi thì set customerId luôn, nếu không thì gán -1
+        int customerId = customerIdString != null ? Integer.parseInt(customerIdString) : -1;
+
+        //Khai báo DAO 
         TableDAO tableDAO = new TableDAO();
         CustomerDAO customerDAO = new CustomerDAO();
         ReservationDAO reservationDAO = new ReservationDAO();
         ReservationDetailDAO reservationDetailDAO = new ReservationDetailDAO();
-        List<Table> selectedTableList = new ArrayList<>();
-        String customerIdString = request.getParameter("customerId");
-        int customerId = customerIdString != null ? Integer.parseInt(customerIdString) : -1;
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/Customer/ICreateReservation.jsp");
+
+        //Lấy danh sách selectedTable từ mảng String Tableid
         try {
             for (String tableId : selectedTableIds) {
                 Table t = tableDAO.getTableById(tableId);
                 selectedTableList.add(t);
             }
         } catch (SQLException ex) {
-            //Chưa xử lý
             Logger.getLogger(CreateReservationServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        //Set thuộc tính cho request để hiển thị trong trường hợp search hoặc reset
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/Customer/ICreateReservation.jsp");
         request.setAttribute("endTime", endTime);
         request.setAttribute("selectedTableList", selectedTableList);
         request.setAttribute("bookingTime", bookingTime);
@@ -98,20 +108,19 @@ public class CreateReservationServlet extends HttpServlet {
 
         //Xử lý hành động của nút bấm
         String action = request.getParameter("action");
-
         switch (action) {
             case "search":
                 Customer customer = customerDAO.getCustomerByPhone(phoneNumber);
                 request.setAttribute("customer", customer);
-
+                //Chuyển trang
                 dispatcher = request.getRequestDispatcher("/WEB-INF/Customer/ICreateReservation.jsp");
                 dispatcher.forward(request, response);
-
                 break;
 
             case "reset":
                 request.removeAttribute("phoneNumber");
                 request.setAttribute("phoneNumberEntered", false);
+                //Chuyển trang
                 dispatcher = request.getRequestDispatcher("/WEB-INF/Customer/ICreateReservation.jsp");
                 dispatcher.forward(request, response);
                 break;
@@ -124,10 +133,8 @@ public class CreateReservationServlet extends HttpServlet {
                     // 1. Lấy kết nối và tắt auto-commit để thực hiện transaction
                     conn.setAutoCommit(false); // Tắt auto-commit để kiểm soát transaction
 
-                    //2. Lấy đối tượng Customer hoặc tạo mới và lưu
-                    if (customerId != -1) {
-                        customer = customerDAO.getCustomerById(customerId);
-                    } else {
+                    //2. nếu id = -1 (Trên trang không có đối tượng customer) thì phải tạo mới và lưu vào CSDL
+                    if (customerId == -1) {
                         customer = new Customer(
                                 0,
                                 name,

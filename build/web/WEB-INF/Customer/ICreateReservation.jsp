@@ -17,18 +17,24 @@
     </head>
     <body>
         <%
+            //Các biến được chuyển sang từ trang trước đó
             String bookingDate = (String) request.getAttribute("bookingDate");
             String bookingTime = (String) request.getAttribute("bookingTime");
             String endTime = (String) request.getAttribute("endTime");
             List<Table> selectedTableList = (List<Table>) request.getAttribute("selectedTableList");
+
+            //Các biến xử lý trong trang
             Customer customer = (Customer) request.getAttribute("customer");
             String phoneNumber = (String) request.getAttribute("phoneNumber");
             Boolean phoneNumberEntered = (Boolean) request.getAttribute("phoneNumberEntered");
+            String hiddenEmail = "";
+
             if (phoneNumber == null) {
                 phoneNumber = "";
             }
-            String hiddenEmail = "";
-            if (customer!= null && customer.getEmail() != null && !customer.getEmail().isEmpty()) {
+
+            //Kiểm tra nếu khách hàng có email thì ẩn chữ cái trong email
+            if (customer != null && customer.getEmail() != null && !customer.getEmail().isEmpty()) {
                 String email = customer.getEmail();
                 int index = email.indexOf('@');
                 hiddenEmail = email.substring(0, 1) + "***" + email.charAt(index - 1) + email.substring(index);
@@ -40,13 +46,17 @@
             <input hidden name="endTime" value="<%= endTime%>">
             <input hidden name="bookingDate" value="<%=bookingDate%>">
             <label>Phone number (10 digits):</label><br>
-            <input type="text" name="phoneNumber" pattern="[0-9]{10}" value="<%=phoneNumber%>" placeholder="e.g., 0981234567"
+            <input required type="text" name="phoneNumber" pattern="[0-9]{10}" value="<%=phoneNumber%>" placeholder="e.g., 0981234567"
+                   <!--Không cho phép người dùng thay đổi sdt khi đã nhập, chỉ được dùng nút reset-->
                    <%= (phoneNumber != null && !phoneNumber.isEmpty()) ? "readonly style='background-color: #e9ecef; cursor: not-allowed;'" : ""%>
-                   required>
-            <button type="submit" name="action" value="reset">Reset</button>
+                   >
+                   <button type="submit" name="action" value="reset">Reset</button>
             <button type="submit" name="action" value="search">Search</button><br><br>
 
             <%
+                //Nếu chưa nhập sdt: không hiển thị các ô thông tin
+                //Nếu đã nhập sdt (sdt không tồn tại trong hệ thống): Hiển thị các trường thông tin tạo khách hàng mới
+                //Nếu đã nhập sdt (sdt đã tồn tại): Hiển thị các trường thông tin readonly
                 if (phoneNumberEntered) {
 
                     if (customer == null) {
@@ -67,8 +77,6 @@
             <input hidden name="customerId" value="<%= customer.getId()%>">
             <input type="text" name="name" value="<%=customer.getName()%>" readonly
                    style="background-color: #e9ecef; cursor: not-allowed;"><br><br>
-            <%
-            %>
             <label>Email (optional)</label><br>
             <input type="text" name="email" value="<%=hiddenEmail%>" readonly
                    style="background-color: #e9ecef; cursor: not-allowed;"><br><br>
@@ -113,8 +121,8 @@
 
         </form>
         <form action = "SelectAvailableTablesServlet" method = "get">
-            <input hidden name="time" value="<%= bookingTime%>">
-            <input hidden name="date" value="<%= bookingDate%>">
+            <input hidden name="bookingTime" value="<%= bookingTime%>">
+            <input hidden name="bookingDate" value="<%= bookingDate%>">
             <%
                 for (Table t : selectedTableList) {
             %>

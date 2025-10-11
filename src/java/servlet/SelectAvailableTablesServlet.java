@@ -22,36 +22,35 @@ import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "SelectAvailableTablesServlet", urlPatterns = {"/SelectAvailableTablesServlet"})
 public class SelectAvailableTablesServlet extends HttpServlet {
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        //Kiểm tra nếu trong request có thông tin về thời gian đặt bàn
-        String date = request.getParameter("date");
-        String time = request.getParameter("time");
-        if (date != null && !date.isEmpty() && time != null && !time.isEmpty()) {
-            LocalDateTime startTime = LocalDateTime.of(LocalDate.parse(date), LocalTime.parse(time));
+
+        //Kiểm tra nếu trong request có thông tin về thời gian đặt bàn (Trường hợp cancel từ trang sau đó hoặc chọn ngày)
+        String bookingDate = request.getParameter("bookingDate");
+        String bookingTime = request.getParameter("bookingTime");
+        if (bookingDate != null && !bookingDate.isEmpty() && bookingTime != null && !bookingTime.isEmpty()) {
+            LocalDateTime startTime = LocalDateTime.of(LocalDate.parse(bookingDate), LocalTime.parse(bookingTime));
             LocalDateTime endTime = startTime.plusHours(3); //Mỗi đơn đặt được giữ chỗ 3 tiếng
-            
-            request.setAttribute("bookingDate", date);
-            request.setAttribute("bookingTime", time);
+
+            request.setAttribute("bookingDate", bookingDate);
+            request.setAttribute("bookingTime", bookingTime);
             request.setAttribute("endTime", endTime.toLocalTime().toString());
             TableDAO tableDAO = new TableDAO();
             List<Table> tableList = new ArrayList<>();
-                
-                try {
-                    tableList = tableDAO.getAvailableTables(startTime);
-                    request.setAttribute("tableList", tableList);
-                } catch (SQLException ex) {
-                    Logger.getLogger(SelectAvailableTablesServlet.class.getName()).log(Level.SEVERE, null, ex);
-                }    
+
+            try {
+                tableList = tableDAO.getAvailableTables(startTime);
+                request.setAttribute("tableList", tableList);
+            } catch (SQLException ex) {
+                Logger.getLogger(SelectAvailableTablesServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        
-        //Kiểm tra nếu trong request có thông tin về bàn đã chọn
+
+        //Kiểm tra nếu trong request có thông tin về bàn đã chọn (Trường hợp quay lại từ trang CreateReservation)
         String[] selectedTableIds = request.getParameterValues("selectedTableIds");
-        if(selectedTableIds != null)
-        {
+        if (selectedTableIds != null) {
             request.setAttribute("selectedTableIds", selectedTableIds);
         }
         //Chuyển trang
