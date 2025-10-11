@@ -6,6 +6,7 @@ import dao.ReservationDetailDAO;
 import dao.TableDAO;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,10 +21,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import model.Customer;
 import model.Reservation;
 import model.ReservationDetail;
+import util.DBUtil;
 
 @WebServlet(name = "CreateReservationServlet", urlPatterns = {"/CreateReservationServlet"})
 public class CreateReservationServlet extends HttpServlet {
@@ -100,12 +101,12 @@ public class CreateReservationServlet extends HttpServlet {
 
         switch (action) {
             case "search":
-                    Customer customer = customerDAO.getCustomerByPhone(phoneNumber);
-                    request.setAttribute("customer", customer);
+                Customer customer = customerDAO.getCustomerByPhone(phoneNumber);
+                request.setAttribute("customer", customer);
 
-                    dispatcher = request.getRequestDispatcher("/WEB-INF/Customer/ICreateReservation.jsp");
-                    dispatcher.forward(request, response);
-                
+                dispatcher = request.getRequestDispatcher("/WEB-INF/Customer/ICreateReservation.jsp");
+                dispatcher.forward(request, response);
+
                 break;
 
             case "reset":
@@ -116,42 +117,71 @@ public class CreateReservationServlet extends HttpServlet {
                 break;
 
             case "submit":
-                //1. Lấy đối tượng Customer hoặc tạo mới và lưu
-                if (customerId != -1) {
-                    customer = customerDAO.getCustomerById(customerId);
-                } else {
-                    customer = new Customer(
+                Connection conn = null;
+                //BẮT ĐẦU TRANSACTION
+                try {
+                    conn = DBUtil.getConnection();
+                    // 1. Lấy kết nối và tắt auto-commit để thực hiện transaction
+                    conn.setAutoCommit(false); // Tắt auto-commit để kiểm soát transaction
+
+                    //2. Lấy đối tượng Customer hoặc tạo mới và lưu
+                    if (customerId != -1) {
+                        customer = customerDAO.getCustomerById(customerId);
+                    } else {
+                        customer = new Customer(
+                                0,
+                                name,
+                                phoneNumber,
+                                email,
+                                (dateOfBirth != null && !dateOfBirth.isEmpty()) ? LocalDate.parse(dateOfBirth) : null);
+                        customerId = customerDAO.insertCustomer(customer);
+                    }
+
+                    //3. Lưu đối tượng reservation
+                    Reservation reservation = new Reservation(
                             0,
-                            name,
-                            phoneNumber,
-                            email,
-                            (dateOfBirth != null && !dateOfBirth.isEmpty()) ? LocalDate.parse(dateOfBirth) : null);
-                    customerId = customerDAO.insertCustomer(customer);
-                }
+                            LocalDateTime.of(LocalDate.parse(bookingDate), LocalTime.parse(bookingTime)),
+                            note,
+                            "pending",
+                            customerId);
+                    int reservationId = reservationDAO.insertReservation(reservation);
+                    if (reservationId < 0) {
+                        System.out.println("Lỗi trả về id reservation sai");
+                        break;
+                    }
 
-                //2. Lưu đối tượng reservation
-                Reservation reservation = new Reservation(
-                        0,
-                        LocalDateTime.of(LocalDate.parse(bookingDate), LocalTime.parse(bookingTime)),
-                        note,
-                        "pending",
-                        customerId);
-                int reservationId = reservationDAO.insertReservation(reservation);
-                if(reservationId < 0){
-                    System.out.println("Lỗi trả về id reservation sai");
-                    break;
-                }
+                    //4. Lưu đối tượng reservationDetail
+                    for (Table t : selectedTableList) {
+                        ReservationDetail rDetail = new ReservationDetail(0, reservationId, t.getId());
+                        reservationDetailDAO.insertReservationDetail(rDetail);
+                    }
 
-                //3. Lưu đối tượng reservationDetail
-                for (Table t : selectedTableList) {
-                    ReservationDetail rDetail = new ReservationDetail(0, reservationId, t.getId());
-                    reservationDetailDAO.insertReservationDetail(rDetail);
-                }
+                    //5. Commit transaction sau khi tất cả các thao tác thành công
+                    conn.commit();
 
-                //4. Về trang chủ kèm thông báo thành công
-                request.setAttribute("bookingTableSuccess", true);
-                dispatcher = request.getRequestDispatcher("/WEB-INF/Customer/IMenuCustomer.jsp");
-                dispatcher.forward(request, response);
+                    //6. Về trang chủ kèm thông báo thành công
+                    request.setAttribute("bookingTableSuccess", true);
+                    dispatcher = request.getRequestDispatcher("/WEB-INF/Customer/IMenuCustomer.jsp");
+                    dispatcher.forward(request, response);
+                } catch (Exception e) {
+                    if (conn != null) {
+                        try {
+                            conn.rollback(); // Rollback nếu có lỗi xảy ra
+                        } catch (SQLException se) {
+                            se.printStackTrace();
+                        }
+                    }
+                    e.printStackTrace();
+                } finally {
+                    if (conn != null) {
+                        try {
+                            conn.setAutoCommit(true); // Khôi phục chế độ auto-commit về mặc định
+                            conn.close();
+                        } catch (SQLException se) {
+                            se.printStackTrace();
+                        }
+                    }
+                }
                 break;
         }
     }

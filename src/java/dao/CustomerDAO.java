@@ -41,8 +41,11 @@ public class CustomerDAO {
                 c.setPhoneNumber(rs.getString("phoneNumber"));
                 c.setEmail(rs.getString("email"));
                 String dob = rs.getString("dateOfBirth");
-                if(dob != null){
+                if(dob != null && !dob.isEmpty()){
                     c.setDateOfBirth(LocalDate.parse(dob));
+                }
+                else{
+                    c.setDateOfBirth(null);
                 }
 
                 return c;

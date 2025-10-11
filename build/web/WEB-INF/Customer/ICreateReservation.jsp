@@ -27,10 +27,9 @@
             if (phoneNumber == null) {
                 phoneNumber = "";
             }
-            String email = customer.getEmail();
             String hiddenEmail = "";
-            if (customer!= null && email != null && !email.isEmpty()) {
-                
+            if (customer!= null && customer.getEmail() != null && !customer.getEmail().isEmpty()) {
+                String email = customer.getEmail();
                 int index = email.indexOf('@');
                 hiddenEmail = email.substring(0, 1) + "***" + email.charAt(index - 1) + email.substring(index);
             }
