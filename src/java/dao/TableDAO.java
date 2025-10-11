@@ -22,6 +22,7 @@ public class TableDAO {
     public List<Table> getAvailableTables(LocalDateTime bookingTime) throws SQLException {
         List<Table> tableList = new ArrayList<>();
         
+        //SQL thêm r.status = 'confirmed' --> để chỉ lọc nhưng bàn đã confirm
         String sql = """
             SELECT t.*
             FROM tblTable t
@@ -29,8 +30,7 @@ public class TableDAO {
                 SELECT rd.tblTableid
                 FROM tblReservationDetail rd
                 JOIN tblReservation r ON rd.tblReservationid = r.id
-                WHERE r.status = 'confirmed'
-                AND r.bookingTime >= DATE_SUB(?, INTERVAL 3 HOUR)
+                WHERE r.bookingTime >= DATE_SUB(?, INTERVAL 3 HOUR)
             	AND r.bookingTime <= DATE_ADD(?, INTERVAL 3 HOUR)
                 )
 
