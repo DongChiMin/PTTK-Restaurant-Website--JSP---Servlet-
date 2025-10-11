@@ -8,7 +8,6 @@ import java.util.List;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Table;
@@ -18,7 +17,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "SelectAvailableTablesServlet", urlPatterns = {"/SelectAvailableTablesServlet"})
 public class SelectAvailableTablesServlet extends HttpServlet {

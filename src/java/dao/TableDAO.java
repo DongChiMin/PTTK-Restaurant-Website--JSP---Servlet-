@@ -1,9 +1,7 @@
 package dao;
 
-import com.mysql.cj.jdbc.CallableStatement;
 import model.Table;
 import util.DBUtil;
-
 import java.time.LocalDateTime;
 import java.sql.*;
 import java.util.ArrayList;
