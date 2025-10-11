@@ -30,9 +30,7 @@
                 <option value="drink">Drink</option>
                 <option value="dessert">Dessert</option>
             </select><br><br>
-
-            
-            <button type = "button" onclick="window.location.href='ManageDishesServlet'"> Cancel</button>           
+            <button type = "button" onclick="window.location.href = 'ManageDishesServlet'"> Cancel</button>           
             <button type = "submit">Confirm</button>
         </form>
 

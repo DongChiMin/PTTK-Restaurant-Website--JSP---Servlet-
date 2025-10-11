@@ -22,13 +22,10 @@ public class ManageDishesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         DishDAO dishDAO = new DishDAO();
-        try {
-            Dish[] dishes = dishDAO.getDishesList();
-            request.setAttribute("dishes", dishes);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/Manager/IManageDishes.jsp");
-            dispatcher.forward(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(ManageDishesServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Dish[] dishesList = dishDAO.getDishesList();
+        request.setAttribute("dishesList", dishesList);
+        //Chuyển trang
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/Manager/IManageDishes.jsp");
+        dispatcher.forward(request, response);
     }
 }

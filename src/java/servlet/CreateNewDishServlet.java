@@ -25,22 +25,21 @@ public class CreateNewDishServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Các thuộc tính cần dùng
         String name = request.getParameter("name");
         String description = request.getParameter("description");
         String priceStr = request.getParameter("price");
         String category = request.getParameter("category");
         float price = Float.parseFloat(priceStr);
-        
+
         //Đóng gói
         Dish newDish = new Dish(0, name, description, price, category);
-        
+
+        //Khai báo lớp DAO
         DishDAO dishDAO = new DishDAO();
-        try {
-            dishDAO.submitNewDish(newDish);
-            response.sendRedirect("ManageDishesServlet");
-        } catch (SQLException ex) {
-            //Chưa xử lý
-            Logger.getLogger(CreateNewDishServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        dishDAO.insertDish(newDish);
+
+        //Chuyển trang
+        response.sendRedirect("ManageDishesServlet");
     }
 }

@@ -25,9 +25,9 @@
                 <th>Action</th>
             </tr>
             <%
-                Dish[] dishes = (Dish[]) request.getAttribute("dishes");
-                if (dishes != null) {
-                    for (Dish dish : dishes) {%>
+                Dish[] dishesList = (Dish[]) request.getAttribute("dishesList");
+                if (dishesList != null) {
+                    for (Dish dish : dishesList) {%>
             <tr>
                 <td><%=dish.getId()%></td>
                 <td><%=dish.getName()%></td>
@@ -50,11 +50,11 @@
             %>
 
         </table>
-            <form action="MenuManagerServlet" method="get">
-                <button type="submit">Cancel</button>
-            </form>
-            <form action="CreateNewDishServlet" method="get">
-                <button type="submit">Create new Dish</button>
-            </form>
+        <form action="MenuManagerServlet" method="get">
+            <button type="submit">Cancel</button>
+        </form>
+        <form action="CreateNewDishServlet" method="get">
+            <button type="submit">Create new Dish</button>
+        </form>
     </body>
 </html>
