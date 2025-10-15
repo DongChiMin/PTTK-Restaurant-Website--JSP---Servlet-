@@ -85,18 +85,18 @@ public class CustomerDAO {
         }
     }
 
-    public int insertCustomer(Customer customer) {
+    public int insertCustomer(Customer newCustomer) {
         String sql = """
                  INSERT INTO tblCustomer (name, phoneNumber, email, dateOfBirth)
                  VALUES (?, ?, ?, ?)
                  """;
 
         try (Connection conn = DBUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            LocalDate dob = customer.getDateOfBirth();
+            LocalDate dob = newCustomer.getDateOfBirth();
 
-            ps.setString(1, customer.getName());
-            ps.setString(2, customer.getPhoneNumber());
-            ps.setString(3, customer.getEmail());
+            ps.setString(1, newCustomer.getName());
+            ps.setString(2, newCustomer.getPhoneNumber());
+            ps.setString(3, newCustomer.getEmail());
             if (dob != null) {
                 ps.setDate(4, java.sql.Date.valueOf(dob));
             } else {

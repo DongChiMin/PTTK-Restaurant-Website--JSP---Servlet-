@@ -20,7 +20,7 @@ public class ReservationDetailDAO {
     public ReservationDetailDAO() {
     }
     
-    public void insertReservationDetail(ReservationDetail reservationDetail) {
+    public void insertReservationDetail(ReservationDetail newReservationDetail) {
     String sql = """
         INSERT INTO tblReservationDetail (tblReservationid, tblTableid)
         VALUES (?, ?)
@@ -29,8 +29,8 @@ public class ReservationDetailDAO {
     try (Connection conn = DBUtil.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        ps.setInt(1, reservationDetail.getTblReservationid());
-        ps.setInt(2, reservationDetail.getTblTableid());
+        ps.setInt(1, newReservationDetail.getTblReservationid());
+        ps.setInt(2, newReservationDetail.getTblTableid());
 
         ps.executeUpdate();
     } catch (SQLException ex) {
