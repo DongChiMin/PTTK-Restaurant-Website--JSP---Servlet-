@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,7 +21,7 @@ public class TableDAO {
     //Lấy danh sách các bàn trống trong khoảng thời gian bookingTime + 3 tiếng
     public List<Table> getAvailableTables(LocalDateTime bookingTime) throws SQLException {
         List<Table> tableList = new ArrayList<>();
-        
+
         //SQL thêm r.status = 'confirmed' --> để chỉ lọc nhưng bàn đã confirm
         String sql = """
             SELECT t.*
@@ -37,7 +39,7 @@ public class TableDAO {
             ps.setString(1, bookingTime.toString());
             ps.setString(2, bookingTime.toString());
             ResultSet rs = ps.executeQuery();
-            
+
             while (rs.next()) {
                 Table t = new Table();
                 t.setId(rs.getInt("id"));
@@ -52,7 +54,7 @@ public class TableDAO {
     }
 
     //Lấy bàn theo ID
-    public Table getTableById(String id) throws SQLException {
+    public Table getTableById(String id) {
         Table t = null;
 
         String sql = """
@@ -71,6 +73,9 @@ public class TableDAO {
                 t.setLocation(rs.getString("location"));
                 t.setCapacity(rs.getInt("capacity"));
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
         return t;
     }

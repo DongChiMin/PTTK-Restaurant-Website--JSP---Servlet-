@@ -21,6 +21,7 @@
             String bookingDate = (String) request.getAttribute("bookingDate");
             String bookingTime = (String) request.getAttribute("bookingTime");
             String endTime = (String) request.getAttribute("endTime");
+            String[] selectedTableIds = (String[]) request.getAttribute("selectedTableIds");
             List<Table> selectedTableList = (List<Table>) request.getAttribute("selectedTableList");
 
             //Các biến xử lý trong trang
@@ -41,10 +42,19 @@
             }
         %>
 
-        <form id="reservationForm" action = "CreateReservationServlet" method = "post">
+        <form id="phoneNumberForm" action = "CreateReservationServlet" method = "get">
+            <!--Các biến ẩn cần gửi--> 
             <input hidden name="bookingTime" value="<%= bookingTime%>">
             <input hidden name="endTime" value="<%= endTime%>">
             <input hidden name="bookingDate" value="<%=bookingDate%>">
+            <%
+                for (String s : selectedTableIds) {
+            %>
+            <input hidden name="selectedTableIds" value="<%=s%>">
+            <%
+                }
+            %>
+
             <label>Phone number (10 digits):</label><br>
             <input 
                 required 
@@ -54,10 +64,15 @@
                 value="<%= phoneNumber%>" 
                 placeholder="e.g., 0981234567"
                 <%= (phoneNumber != null && !phoneNumber.isEmpty()) ? "readonly style='background-color: #e9ecef; cursor: not-allowed;'" : ""%> 
-            />
+                />
             <button type="submit" name="action" value="reset">Reset</button>
             <button type="submit" name="action" value="search">Search</button><br><br>
-
+        </form>
+        <form id="reservationForm" action = "CreateReservationServlet" method = "post">  
+            <input hidden name="bookingTime" value="<%= bookingTime%>">
+            <input hidden name="endTime" value="<%= endTime%>">
+            <input hidden name="bookingDate" value="<%=bookingDate%>">
+            <input hidden name="phoneNumber" value="<%=phoneNumber%>">
             <%
                 //Nếu chưa nhập sdt: không hiển thị các ô thông tin
                 //Nếu đã nhập sdt (sdt không tồn tại trong hệ thống): Hiển thị các trường thông tin tạo khách hàng mới
@@ -119,7 +134,8 @@
                     %>
                 </table>
             </span><br><br>
-            <span>Phonenumber entered: <%= phoneNumber%></span><br><br>
+            <span>Phonenumber entered: </span>
+            <span id="phoneNumber"><%= phoneNumber%></span><br><br>
             <span>Booking Date: <%= bookingDate%></span><br><br>
             <span>Booking Time: <%= bookingTime%> - <%= endTime%></span><br><br>
             <button type = "submit" name="action" value="submit">Confirm</button>
@@ -137,5 +153,21 @@
             %>
             <button type = "submit">Cancel</button>
         </form>
+        <!--kiểm tra trước khi submit đã nhập sdt chưa-->
+        <script>
+            const form = document.getElementById('reservationForm');
+            form.addEventListener('submit', function (event) {
+                const phoneInput = document.getElementById("phoneNumber");
+                const phoneNumber = phoneInput.textContent.trim();
+                alert("Giá trị là: " + phoneNumber);
+
+                if (phoneNumber === "") {
+                    alert("PLease search by phone number before submit");
+                    event.preventDefault(); // Chặn submit
+                    return;
+                }
+            });
+        </script>
+
     </body>
 </html>

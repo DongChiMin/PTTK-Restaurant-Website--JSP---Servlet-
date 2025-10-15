@@ -80,7 +80,7 @@
                                 }
                             }
                         %>
-                        <input type="checkbox" name="tableIds" value="<%= table.getId()%>" class="table-checkbox" <%= isSelected ? "checked" : ""%> >
+                        <input type="checkbox" name="selectedTableIds" value="<%= table.getId()%>" class="table-checkbox" <%= isSelected ? "checked" : ""%> >
                     </td>
                 </tr>
 
@@ -102,7 +102,7 @@
             <input type="hidden" name="bookingTime" value="<%= bookingTime%>">
             <input type="hidden" name="endTime" value="<%=endTime%>">
             <input type="hidden" name="bookingDate" value="<%= bookingDate%>">
-            <button type = "submit"> Continue </button>
+            <button type = "submit" name="action" value="loadReservationPage"> Continue </button>
         </form>
 
         <!--kiểm tra đã chọn giờ và bàn chưa trước khi gửi form-->
