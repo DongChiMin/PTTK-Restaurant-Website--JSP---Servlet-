@@ -33,8 +33,15 @@ public class ReservationDAO {
 
             // Chuyển LocalDateTime sang Timestamp để lưu vào DB
             ps.setTimestamp(1, java.sql.Timestamp.valueOf(reservation.getBookingTime()));
-
-            ps.setString(2, reservation.getNote());
+            //Kiểm tra note nếu rỗng thì set null vào CSDL
+            String note = reservation.getNote();
+            if(note != null && !note.isEmpty()){
+                ps.setString(2, note);
+            }
+            else{
+                ps.setNull(2, java.sql.Types.VARCHAR);
+            }
+            
             ps.setString(3, reservation.getStatus());
             ps.setInt(4, reservation.getTblCustomerid());
 

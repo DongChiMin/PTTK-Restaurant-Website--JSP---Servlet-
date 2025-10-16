@@ -117,6 +117,9 @@ public class CreateReservationServlet extends HttpServlet {
 
             //2. nếu id = -1 (Trên trang không có đối tượng customer) thì phải tạo mới và lưu vào CSDL
             if (customerId == -1) {
+                if(email.isEmpty()){
+                    email = null;
+                }
                 customer = new Customer(
                         0,
                         name,

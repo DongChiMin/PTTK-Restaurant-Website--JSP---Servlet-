@@ -93,16 +93,27 @@ public class CustomerDAO {
 
         try (Connection conn = DBUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             LocalDate dob = newCustomer.getDateOfBirth();
-
+            String email = newCustomer.getEmail();
+            
             ps.setString(1, newCustomer.getName());
             ps.setString(2, newCustomer.getPhoneNumber());
-            ps.setString(3, newCustomer.getEmail());
+          
+            //Kiểm tra email null
+            if(email != null){
+                  ps.setString(3, email);
+            }
+            else{
+                ps.setNull(3, java.sql.Types.VARCHAR);
+            }
+            
+            //Kiểm tra ngày sinh null
             if (dob != null) {
                 ps.setDate(4, java.sql.Date.valueOf(dob));
             } else {
                 ps.setNull(4, java.sql.Types.DATE);
             }
 
+            //Nếu lưu thành công, trả về id. Nếu không thì trả về -1
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 ResultSet rs = ps.getGeneratedKeys();

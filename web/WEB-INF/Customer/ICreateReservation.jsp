@@ -42,6 +42,7 @@
             }
         %>
 
+        <!--phần form nhập số điện thoại-->
         <form id="phoneNumberForm" action = "CreateReservationServlet" method = "get">
             <!--Các biến ẩn cần gửi--> 
             <input hidden name="bookingTime" value="<%= bookingTime%>">
@@ -55,6 +56,7 @@
                 }
             %>
 
+            <!--Nội dung form-->
             <label>Phone number (10 digits):</label><br>
             <input 
                 required 
@@ -68,6 +70,8 @@
             <button type="submit" name="action" value="reset">Reset</button>
             <button type="submit" name="action" value="search">Search</button><br><br>
         </form>
+                
+        <!--Phần form điền thông tin để submit-->
         <form id="reservationForm" action = "CreateReservationServlet" method = "post">  
             <input hidden name="bookingTime" value="<%= bookingTime%>">
             <input hidden name="endTime" value="<%= endTime%>">
@@ -83,7 +87,7 @@
             %>
             <p>Create new Customer</p><br>
             <label>Name:</label><br>
-            <input type="text" name="name"><br><br>
+            <input type="text" name="name" required><br><br>
 
             <label>Email (optional)</label><br>
             <input type="text" name="email"><br><br>
@@ -159,7 +163,6 @@
             form.addEventListener('submit', function (event) {
                 const phoneInput = document.getElementById("phoneNumber");
                 const phoneNumber = phoneInput.textContent.trim();
-                alert("Giá trị là: " + phoneNumber);
 
                 if (phoneNumber === "") {
                     alert("PLease search by phone number before submit");
