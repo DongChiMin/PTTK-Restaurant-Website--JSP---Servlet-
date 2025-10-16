@@ -98,7 +98,7 @@ label {
   font-weight: 600;
 }
 
-input {
+input, select {
   padding: 12px;
   border: 2px solid #c7d2fe;
   border-radius: 10px;
@@ -112,7 +112,12 @@ input:focus {
   outline: none;
 }
 
-button[type="submit"] {
+select:focus{
+  border-color: #4f46e5;
+  outline: none;
+}
+
+button {
   background: #4f46e5;
   color: #fff;
   padding: 12px 24px;
@@ -122,8 +127,13 @@ button[type="submit"] {
   transition: background 0.3s ease;
 }
 
-button[type="submit"]:hover {
+button:hover {
   background: #6366f1;
+}
+
+button[type="submit"]:disabled {      
+  cursor: not-allowed;  
+  opacity: 0.6;          
 }
 
 button[type="reset"] {

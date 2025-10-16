@@ -10,29 +10,57 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Manage Dishes</title>
+         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/Customer.css">
     </head>
     <body>
-        <h1>Create New Dish</h1>
-        <form action = "CreateNewDishServlet" method = "post">
-            <label>Name:</label><br>
-            <input type="text" name="name" required><br><br>
+        <!-- Navbar -->
+        <nav class="navbar">
+            <a href="/RestaurantWeb" class="logo">Restman Restaurant</a>
+        </nav>
 
-            <label>Description:</label><br>
-            <input type="text" name="description" required><br><br>
+        <!--Nút quay lại trang trước đó-->
+        <div style=" display: flex; justify-content: flex-start; align-items: center;">
+            <button type="submit" onclick="window.location.href = 'ManageDishesServlet'" style="margin-left: 50px; margin-top: 10px">< Go back</button>
+        </div>
 
-            <label>Price</label><br>
-            <input type="number" name="price" min="0" step="0.01" required><br><br>
+        <!--Tên tiêu đề chính-->
+        <div class="container" style="padding:20px">
+            <div style="display: flex; align-items: center; justify-content: center; width: 100%">
+                <h2 style="font-size: 32px">MANAGE ALL DISHES</h2>
+            </div>
+        </div>
 
-            <label>Category</label><br>
-            <select name="category" required>
-                <option value="appetizer">Appetizer</option>
-                <option value="mainDish">Main Dish</option>
-                <option value="drink">Drink</option>
-                <option value="dessert">Dessert</option>
-            </select><br><br>
-            <button type = "button" onclick="window.location.href = 'ManageDishesServlet'"> Cancel</button>           
+        <!--Nội dung chính-->
+        <div class="container">
+            <form action = "CreateNewDishServlet" method = "post" style="width: 100%">
+              
+                        <label>Name:</label>
+                        <input type="text" name="name" required >
+                  
+
+                        <label>Description:</label>
+                        <input type="text" name="description" required >
+                 
+
+
+                        <label>Price</label>
+                        <input type="number" name="price" min="0" step="0.01" required >
+                   
+
+   
+                        <label>Category</label>
+                        <select name="category" required >
+                            <option value="appetizer">Appetizer</option>
+                            <option value="mainDish">Main Dish</option>
+                            <option value="drink">Drink</option>
+                            <option value="dessert">Dessert</option>
+                        </select>
+                 
+
+                
             <button type = "submit">Confirm</button>
         </form>
-
+        </div>
+       
     </body>
 </html>

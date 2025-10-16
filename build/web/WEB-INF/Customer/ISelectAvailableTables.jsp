@@ -14,6 +14,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/Customer.css">
     </head>
     <body>
         <%
@@ -34,76 +35,118 @@
                 bookingDate = "";
             }
         %>
-        <h1>Select Tables</h1>
-        <p>Booking Hours: 08:00 - 23:00</p>
-        <form id="bookingTimeForm" action="SelectAvailableTablesServlet" method="get">
-            <input type="date" id="date" name="bookingDate" value="<%=bookingDate%>" required>
-            <input type="time" id="time" name="bookingTime" value="<%=bookingTime%>" required>
-            <button type="submit">Check table</button>
-        </form>
+        <!-- Navbar -->
+        <nav class="navbar">
+            <a href="/RestaurantWeb" class="logo">Restman Restaurant</a>
+        </nav>
 
-        <!--lấy dữ liệu từ bảng và gửi request-->
-        <form id = "tableForm" action = "CreateReservationServlet" method = "get">
-            <%
-                if (bookingTime.isEmpty()) {
-            %>
-            <p>Please select arriving time above</p>
-            <%
-            } else if (tableList != null && !tableList.isEmpty()) {
-            %>
-            <table border="1">
-                <tr>
-                    <th>ID</th>
-                    <th>Tên bàn</th>
-                    <th>Vị trí</th>
-                    <th>Sức chứa</th>
-                    <th>Chọn</th>
-                </tr>
-                <%
-                    for (Table table : tableList) {
-                %>
-                <tr>
-                    <td><%= table.getId()%></td>
-                    <td><%= table.getName()%></td>
-                    <td><%= table.getLocation()%></td>
-                    <td><%= table.getCapacity()%></td>
-                    <td>
-                        <!--Kiểm tra xem bàn đã được chọn thì hiển thị checkbox đã chọn (Trường hợp quay lại từ trang confirm để chọn thêm bàn)-->
+        <!--Nút quay lại trang trước đó-->
+        <div style=" display: flex; justify-content: flex-start; align-items: center;">
+            <button type="submit" onclick="window.location.href = 'MenuCustomerServlet'" style="margin-left: 50px; margin-top: 10px">< Go back</button>
+        </div>
+
+        <!--Tên tiêu đề chính-->
+        <div class="container" style="padding:20px">
+            <div style="display: flex; align-items: center; justify-content: center; width: 100%">
+                <h2 style="font-size: 32px">SELECT AVAILABLE TABLES</h2>
+            </div>
+        </div>
+
+        <!--nội dung chính-->
+        <div class="container">
+            <div class="card left">
+                <form id="bookingTimeForm" action="SelectAvailableTablesServlet" method="get">
+                    <h2>1. Select booking time</h2>
+                    <p>Available Hours: 08:00 - 23:00</p>
+                    <input type="date" id="date" name="bookingDate" value="<%=bookingDate%>" required>
+                    <input type="time" id="time" name="bookingTime" value="<%=bookingTime%>" required>
+                    <button type="submit">Check table</button>
+                </form>
+            </div>
+            <div class="card right">
+                <!--lấy dữ liệu từ bảng và gửi request-->
+                <form id = "tableForm" action = "CreateReservationServlet" method = "get">
+                    <h2>2. Select Tables</h2>
+                    <%
+                        if (bookingTime.isEmpty()) {
+                    %>
+                    <p style="text-align: center;">Please select booking time beside.</p>
+                    <%
+                    } else if (tableList != null && !tableList.isEmpty()) {
+                    %>
+                    <p>Each table will be reserved for 3 hours.</p>
+                    <table border="1">
+                        <tr>
+                            <th>ID</th>
+                            <th>Table name</th>
+                            <th>Location</th>
+                            <th>Capacity</th>
+                            <th>Select</th>
+                        </tr>
                         <%
-                            boolean isSelected = false;
-                            if (selectedTableIds != null) {
-                                for (String selectedId : selectedTableIds) {
-                                    if (selectedId.equals(String.valueOf(table.getId()))) {
-                                        isSelected = true;
-                                        break;
+                            for (Table table : tableList) {
+                        %>
+                        <tr>
+                            <td><%= table.getId()%></td>
+                            <td><%= table.getName()%></td>
+                            <td><%= table.getLocation()%></td>
+                            <td><%= table.getCapacity()%></td>
+                            <td>
+                                <!--Kiểm tra xem bàn đã được chọn thì hiển thị checkbox đã chọn (Trường hợp quay lại từ trang confirm để chọn thêm bàn)-->
+                                <%
+                                    boolean isSelected = false;
+                                    if (selectedTableIds != null) {
+                                        for (String selectedId : selectedTableIds) {
+                                            if (selectedId.equals(String.valueOf(table.getId()))) {
+                                                isSelected = true;
+                                                break;
+                                            }
+                                        }
                                     }
-                                }
+                                %>
+                                <input type="checkbox" name="selectedTableIds" value="<%= table.getId()%>" class="table-checkbox" <%= isSelected ? "checked" : ""%> >
+                            </td>
+                        </tr>
+
+                        <%
                             }
                         %>
-                        <input type="checkbox" name="selectedTableIds" value="<%= table.getId()%>" class="table-checkbox" <%= isSelected ? "checked" : ""%> >
-                    </td>
-                </tr>
+                    </table>
+                    <div>
+                        <label>Booking Date: </label>
+                        <span><%=bookingDate%> </span>
+                    </div>
+                    <div>
+                        <label>Booking Time: </label>
+                        <span><%=bookingTime%> - <%=endTime%></span>
+                    </div>
+                    <%
+                    } else {
+                    %>
+                    <p style="color : red; text-align: center;">No table available, please try again.</p>
+                    <%
+                        }
+                    %>
+                    <input type="hidden" name="bookingTime" value="<%= bookingTime%>">
+                    <input type="hidden" name="endTime" value="<%=endTime%>">
+                    <input type="hidden" name="bookingDate" value="<%= bookingDate%>">
+                    <%
+                        if (tableList != null && tableList.isEmpty()) {
+                    %>
+                    <button type = "submit" name="action" value="loadReservationPage" disabled> Continue </button>
+                    <%
+                    } else {
+                    %>
+                    <button type = "submit" name="action" value="loadReservationPage"> Continue </button>
+                    <%
+                        }
+                    %>
+                </form>
+            </div>
+        </div>
 
-                <%
-                    }
-                %>
-            </table>
-            <p>Each table will be reserved for 3 hours.</p>
-            <span>Booking Date: <%=bookingDate%> </span><br><br>
-            <span>Booking Time: <%=bookingTime%> - <%=endTime%></span><br><br>
-            <%
-            } else {
-            %>
-            <p>No table available</p>
-            <%
-                }
-            %>
-            <button type = "button" onclick="window.location.href = 'MenuCustomerServlet'"> Cancel</button>   
-            <input type="hidden" name="bookingTime" value="<%= bookingTime%>">
-            <input type="hidden" name="endTime" value="<%=endTime%>">
-            <input type="hidden" name="bookingDate" value="<%= bookingDate%>">
-            <button type = "submit" name="action" value="loadReservationPage"> Continue </button>
-        </form>
+
+
 
         <!--kiểm tra đã chọn giờ và bàn chưa trước khi gửi form-->
         <script>

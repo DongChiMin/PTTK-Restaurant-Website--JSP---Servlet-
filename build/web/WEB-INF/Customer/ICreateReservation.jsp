@@ -62,8 +62,14 @@
             %>
             <button type = "submit" style="margin-left: 50px; margin-top: 10px">< Go back</button>
         </form>
-
         </div>
+            
+        <!--Tên tiêu đề chính-->
+        <div class="container" style="padding:20px">
+            <div style="display: flex; align-items: center; justify-content: center; width: 100%">
+                <h2 style="font-size: 32px">FILL RESERVATION INFORMATION</h2>
+            </div>
+        </div>    
 
         <!--Nội dung chính-->
         <div class="container">
@@ -199,7 +205,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Table name</th>
-                            <th>Localtion</th>
+                            <th>Location</th>
                             <th>Capacity</th>
                         </tr>
                         <%
