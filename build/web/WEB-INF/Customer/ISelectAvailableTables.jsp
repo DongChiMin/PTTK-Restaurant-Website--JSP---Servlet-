@@ -36,7 +36,7 @@
         %>
         <h1>Select Tables</h1>
         <p>Booking Hours: 08:00 - 23:00</p>
-        <form action="SelectAvailableTablesServlet" method="get">
+        <form id="bookingTimeForm" action="SelectAvailableTablesServlet" method="get">
             <input type="date" id="date" name="bookingDate" value="<%=bookingDate%>" required>
             <input type="time" id="time" name="bookingTime" value="<%=bookingTime%>" required>
             <button type="submit">Check table</button>
@@ -111,7 +111,6 @@
             form.addEventListener('submit', function (event) {
                 // Lấy tất cả checkbox có class 'table-checkbox'
                 const checkboxes = document.querySelectorAll('.table-checkbox');
-
                 // Nếu danh sách bàn bị trống
                 if (checkboxes.length === 0) {
                     alert('Please select available booking time and click "Check table"!');
@@ -133,19 +132,46 @@
                 }
             });
         </script>
-        <!--kiểm tra thời gian được phép đặt bàn (chỉ được đựat từ 8h-23h)-->
+        <!--kiểm tra thời gian được phép đặt bàn (chỉ được đặt từ 8h-23h, không được đặt trong quá khứ)-->
         <script>
-            const bookingTime = document.getElementById("time");
-            bookingTime.addEventListener("input", () => {
-                const value = bookingTime.value;
-                const min = "08:00";
-                const max = "23:00";
+            const bookingTimeInput = document.getElementById("time");
+            const bookingDateInput = document.getElementById("date");
+            const bookingTimeForm = document.getElementById("bookingTimeForm");
 
-                if (value < min || value > max) {
-                    alert("Booking time: 08:00 - 23:00. Please select booking time again");
-                    bookingTime.value = "";
+            bookingTimeForm.addEventListener("submit", function (event) {
+                const bookingDate = bookingDateInput.value;
+                const bookingTime = bookingTimeInput.value;
+                const currentDate = new Date();  // Lấy ngày và giờ hiện tại
+                const selectedDate = new Date(bookingDate + "T" + bookingTime);  // Chuyển ngày và giờ người dùng chọn thành đối tượng Date
+
+                // Kiểm tra xem ngày giờ đã chọn có trong quá khứ không
+                if (selectedDate < currentDate) {
+                    alert("You cannot book a table for a past date/time. Please select a future date/time.");
+                    event.preventDefault();  // Ngừng gửi form
+                    return;
+                }
+
+                // Kiểm tra giờ đặt phải trong khoảng từ 08:00 - 23:00
+                const minTime = "08:00";
+                const maxTime = "23:00";
+
+                if (bookingTime < minTime || bookingTime > maxTime) {
+                    alert("Booking time must be between 08:00 and 23:00. Please select a valid time.");
+                    event.preventDefault();  // Ngừng gửi form
+                    return;
                 }
             });
+
+//                bookingTime.addEventListener("input", () => {
+//                    const value = bookingTime.value;
+//                    const min = "08:00";
+//                    const max = "23:00";
+//                    if (value < min || value > max) {
+//                        alert("Booking time: 08:00 - 23:00. Please select booking time again");
+//                        bookingTime.value = "";
+//                    }
+//                }
+//                );
         </script>
     </body>
 </html>
