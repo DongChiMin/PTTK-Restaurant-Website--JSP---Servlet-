@@ -58,38 +58,38 @@ public class CustomerDAO {
         }
     }
 
-    public Customer getCustomerById(int customerId) {
-        String sql = """
-                     SELECT * FROM tblCustomer c
-                     WHERE c.id = ?
-                     """;
-        try (Connection conn = DBUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, customerId);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                Customer c = new Customer();
-                c.setId(rs.getInt("id"));
-                c.setName(rs.getString("name"));
-                c.setPhoneNumber(rs.getString("phoneNumber"));
-                c.setEmail(rs.getString("email"));
-                String dob = rs.getString("dateOfBirth");
-                if(dob != null && !dob.isEmpty()){
-                    c.setDateOfBirth(LocalDate.parse(dob));
-                }
-                else{
-                    c.setDateOfBirth(null);
-                }
-
-                return c;
-            } else {
-                return null;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-    }
+//    public Customer getCustomerById(int customerId) {
+//        String sql = """
+//                     SELECT * FROM tblCustomer c
+//                     WHERE c.id = ?
+//                     """;
+//        try (Connection conn = DBUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+//            ps.setInt(1, customerId);
+//            ResultSet rs = ps.executeQuery();
+//
+//            if (rs.next()) {
+//                Customer c = new Customer();
+//                c.setId(rs.getInt("id"));
+//                c.setName(rs.getString("name"));
+//                c.setPhoneNumber(rs.getString("phoneNumber"));
+//                c.setEmail(rs.getString("email"));
+//                String dob = rs.getString("dateOfBirth");
+//                if(dob != null && !dob.isEmpty()){
+//                    c.setDateOfBirth(LocalDate.parse(dob));
+//                }
+//                else{
+//                    c.setDateOfBirth(null);
+//                }
+//
+//                return c;
+//            } else {
+//                return null;
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, ex);
+//            return null;
+//        }
+//    }
     
     public Customer getCustomerByEmail(String email){
         String sql = """
