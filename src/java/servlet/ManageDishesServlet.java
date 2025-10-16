@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Dish;
 
 @WebServlet(name = "ManageDishesServlet", urlPatterns = {"/ManageDishesServlet"})
@@ -16,6 +17,14 @@ public class ManageDishesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        HttpSession session = request.getSession();
+        String successMessage = (String) session.getAttribute("successMessage");
+        if(successMessage != null && !successMessage.isEmpty()){
+            request.setAttribute("successMessage", successMessage);
+            session.removeAttribute("successMessage");
+        }
+        
         DishDAO dishDAO = new DishDAO();
         Dish[] dishesList = dishDAO.getDishesList();
         request.setAttribute("dishesList", dishesList);

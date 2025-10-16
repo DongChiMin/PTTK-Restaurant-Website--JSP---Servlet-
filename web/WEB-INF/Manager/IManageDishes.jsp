@@ -14,6 +14,17 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/Customer.css">
     </head>
     <body>
+        <%
+            String successMessage = (String) request.getAttribute("successMessage");
+            if (successMessage != null && !successMessage.isEmpty()) {
+        %>
+        <script>
+            alert("Add dish successfully!");
+        </script>
+        <%
+            }
+        %>
+
         <!-- Navbar -->
         <nav class="navbar">
             <a href="/RestaurantWeb" class="logo">Restman Restaurant</a>

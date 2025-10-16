@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Dish;
 
 @WebServlet(name = "CreateNewDishServlet", urlPatterns = {"/CreateNewDishServlet"})
@@ -37,6 +38,8 @@ public class CreateNewDishServlet extends HttpServlet {
         dishDAO.insertDish(newDish);
 
         //Chuyển trang
+        HttpSession session = request.getSession();
+        session.setAttribute("successMessage", "Dish added successfully!");
         response.sendRedirect("ManageDishesServlet");
     }
 }
