@@ -117,8 +117,21 @@ public class CreateReservationServlet extends HttpServlet {
 
             //2. nếu id = -1 (Trên trang không có đối tượng customer) thì phải tạo mới và lưu vào CSDL
             if (customerId == -1) {
-                if(email.isEmpty()){
-                    email = null;
+                if(email != null){
+                    if(email.isEmpty()){
+                        email = null;
+                    }
+                    else{
+                    //kiểm tra email đã tồn tại chưa, nếu đã tồn tại thì quay lại trang và thông báo
+                        Customer checkEmail = customerDAO.getCustomerByEmail(email);
+                        if(checkEmail != null){
+                            request.setAttribute("phoneNumberEntered", true);
+                            request.setAttribute("emailError", "This email address is already in use.");
+                            doGet(request, response);
+                            return;
+                        }
+                        
+                    }
                 }
                 customer = new Customer(
                         0,

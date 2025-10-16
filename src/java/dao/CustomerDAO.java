@@ -73,7 +73,46 @@ public class CustomerDAO {
                 c.setName(rs.getString("name"));
                 c.setPhoneNumber(rs.getString("phoneNumber"));
                 c.setEmail(rs.getString("email"));
-                c.setDateOfBirth(LocalDate.parse(rs.getString("dateOfBirth")));
+                String dob = rs.getString("dateOfBirth");
+                if(dob != null && !dob.isEmpty()){
+                    c.setDateOfBirth(LocalDate.parse(dob));
+                }
+                else{
+                    c.setDateOfBirth(null);
+                }
+
+                return c;
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
+    public Customer getCustomerByEmail(String email){
+        String sql = """
+                     SELECT * FROM tblCustomer c
+                     WHERE c.email = ?
+                     """;
+        try (Connection conn = DBUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Customer c = new Customer();
+                c.setId(rs.getInt("id"));
+                c.setName(rs.getString("name"));
+                c.setPhoneNumber(rs.getString("phoneNumber"));
+                c.setEmail(rs.getString("email"));
+                String dob = rs.getString("dateOfBirth");
+                if(dob != null && !dob.isEmpty()){
+                    c.setDateOfBirth(LocalDate.parse(dob));
+                }
+                else{
+                    c.setDateOfBirth(null);
+                }
 
                 return c;
             } else {
