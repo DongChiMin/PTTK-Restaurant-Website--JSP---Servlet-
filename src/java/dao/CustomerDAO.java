@@ -20,8 +20,11 @@ import util.DBUtil;
  * @author namv2
  */
 public class CustomerDAO {
+    
+    private Connection conn;
 
     public CustomerDAO() {
+        this.conn = DBUtil.getConnection();
     }
 
     //Lấy khách hàng theo số điện thoại định danh, nếu không tìm thấy (chưa tồn tại trong CSDL) thì trả null
@@ -30,7 +33,7 @@ public class CustomerDAO {
                      SELECT * FROM tblCustomer c
                      WHERE c.phoneNumber = ?
                      """;
-        try (Connection conn = DBUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, phoneNumber);
             ResultSet rs = ps.executeQuery();
 

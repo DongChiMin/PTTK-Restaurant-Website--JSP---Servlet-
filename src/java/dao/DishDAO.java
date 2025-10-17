@@ -14,13 +14,16 @@ import java.util.logging.Logger;
 
 public class DishDAO {
 
+    private Connection conn;
+    
     public DishDAO() {
+        this.conn = DBUtil.getConnection();
     }
 
     public Dish[] getDishesList() {
         String sql = "SELECT * FROM tblDish";
 
-        try (Connection conn = DBUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
 
             List<Dish> dishList = new ArrayList<>();

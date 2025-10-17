@@ -20,7 +20,10 @@ import util.DBUtil;
  */
 public class ReservationDAO {
 
+    private Connection conn;
+    
     public ReservationDAO() {
+        this.conn = DBUtil.getConnection();
     }
 
     public int insertReservation(Reservation reservation) {
@@ -29,7 +32,7 @@ public class ReservationDAO {
         VALUES (?, ?, ?, ?)
     """;
 
-        try (Connection conn = DBUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             // Chuyển LocalDateTime sang Timestamp để lưu vào DB
             ps.setTimestamp(1, java.sql.Timestamp.valueOf(reservation.getBookingTime()));

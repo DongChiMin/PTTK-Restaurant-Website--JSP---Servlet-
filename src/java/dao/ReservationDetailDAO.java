@@ -16,8 +16,10 @@ import util.DBUtil;
  * @author namv2
  */
 public class ReservationDetailDAO {
+    private Connection conn;
 
     public ReservationDetailDAO() {
+        this.conn = DBUtil.getConnection();
     }
     
     public void insertReservationDetail(ReservationDetail newReservationDetail) {
@@ -26,8 +28,7 @@ public class ReservationDetailDAO {
         VALUES (?, ?)
     """;
 
-    try (Connection conn = DBUtil.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
+    try ( PreparedStatement ps = conn.prepareStatement(sql)) {
 
         ps.setInt(1, newReservationDetail.getTblReservationid());
         ps.setInt(2, newReservationDetail.getTblTableid());

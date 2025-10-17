@@ -14,8 +14,11 @@ import java.util.logging.Logger;
  * @author namv2
  */
 public class TableDAO {
+    
+    private Connection conn;
 
     public TableDAO() {
+        this.conn = DBUtil.getConnection();
     }
 
     //Lấy danh sách các bàn trống trong khoảng thời gian bookingTime + 3 tiếng
@@ -35,7 +38,7 @@ public class TableDAO {
                 )
 
                      """;
-        try (Connection conn = DBUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, bookingTime.toString());
             ps.setString(2, bookingTime.toString());
             ResultSet rs = ps.executeQuery();
