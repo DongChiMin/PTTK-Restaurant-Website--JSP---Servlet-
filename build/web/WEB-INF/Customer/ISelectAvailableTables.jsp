@@ -132,7 +132,7 @@
                                 <input type="hidden" name="endTime" value="<%=endTime%>">
                                 <input type="hidden" name="bookingDate" value="<%= bookingDate%>">
                                 <div style=" display: flex; justify-content: flex-start; align-items: center; margin-top: 20px; gap:20px;">
-                                    <button type="submit" onclick="window.location.href = 'MenuCustomerServlet'" class="btn-cancel">< Go back</button>
+                                    <button type="button" onclick="window.location.href = 'MenuCustomerServlet'" class="btn-cancel">< Go back</button>
                                     <%
                                         if ((tableList != null && tableList.isEmpty()) || bookingTime.isEmpty()) {
                                     %>
