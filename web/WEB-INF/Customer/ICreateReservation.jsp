@@ -91,7 +91,7 @@
 
                     <!--Nội dung form-->
                     <h2>1. Check your Phone number</h2>
-                    <label>Phone number (10 digits):</label>
+                    <label>Phone number (10 digits)<span style="color: red;">*</span></label>
 
                     <input 
                         required 

@@ -15,7 +15,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 }
 
 body {
-  background: radial-gradient(circle at 30% 20%, #eef2ff 0%, #e0e7ff 50%, #c7d2fe 100%);
+  background: radial-gradient(circle at 30% 20%, #e4e5e9 0%, #cad2e4 50%, #b8c2d6 100%);
   color: #1e293b;
   min-height: 100vh;
 }
@@ -27,7 +27,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(90deg, #4f46e5, #6366f1);  /* Giữ nguyên, màu sắc nhẹ nhàng */
+  background: linear-gradient(90deg, #30435f, #2a3b55);
   padding: 14px 40px;
   color: #fff;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
@@ -79,15 +79,16 @@ body {
 }
 
 h2 {
+    margin-bottom: 10px;
   text-align: center;
   font-size: 22px;
-  background: linear-gradient(90deg, #4f46e5, #7c3aed);
+  background: linear-gradient(90deg, #67778f, #2a3b55);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 form {
-  padding-bottom: 40px;
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -99,7 +100,7 @@ label {
 }
 
 input, select {
-  padding: 12px;
+  padding: 8px;
   border: 2px solid #c7d2fe;
   border-radius: 10px;
   font-size: 16px;
@@ -118,17 +119,34 @@ select:focus{
 }
 
 button {
-  background: #4f46e5;
+  background: #2a3b55;
   color: #fff;
-  padding: 12px 24px;
+  padding: 10px 24px;
   border-radius: 10px;
+  border: 1px solid #2a3b55;
+  filter: drop-shadow(0 2px 6px #d7e2f1);
   font-weight: 600;
   cursor: pointer;
   transition: background 0.3s ease;
 }
 
 button:hover {
-  background: #6366f1;
+    background: #0c121b;
+}
+
+.btn-cancel{
+  background: white;
+  color: #1e293b;
+  padding: 10px 24px;
+  font-weight: 600;
+  border: 1px solid #d7e2f1;
+  filter: drop-shadow(0 2px 6px #d7e2f1);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-cancel:hover{
+    background: #e9ecef;
 }
 
 button[type="submit"]:disabled {      
@@ -161,7 +179,7 @@ table {
 }
 
 table th, table td {
-  padding: 12px;
+  padding: 10px;
   text-align: left;
   font-size: 16px;
   border: 1px solid #e0e7ff;
@@ -169,8 +187,8 @@ table th, table td {
 
 table th {
   background: #f8fafc;
-  font-weight: 600;
-  color: #4f46e5;
+  font-weight: 900;
+  color: linear-gradient(90deg, #7084a3, #1e293b);
 }
 
 table tr:nth-child(even) {
@@ -180,4 +198,45 @@ table tr:nth-child(even) {
 table tr:hover {
   background: #eef2ff;
   cursor: pointer;
+}
+
+.timeline {
+  position: relative;
+  margin: 20px;
+  padding-left: 25px;
+  border-left: 2px solid #ccc;
+}
+
+.step {
+  position: relative;
+  padding: 10px 0 20px 20px;
+  color: #888;
+}
+
+.circle {
+  position: absolute;
+  left: -10px;
+  top: 16px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ccc;
+  border: 2px solid white;
+}
+
+.step.active .circle {
+  background-color: #4d607c;
+  border: 2px solid #4d607c;
+}
+
+.step.active .label {
+  font-weight: bold;
+  background: linear-gradient(90deg, #67778f, #4d607c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 18px;
+}
+
+.step .label {
+  margin-left: 10px;
 }
