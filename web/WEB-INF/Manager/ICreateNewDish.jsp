@@ -32,23 +32,14 @@
 
         <!--Nội dung chính-->
         <div class="container">
-            <form action = "CreateNewDishServlet" method = "post" style="width: 100%">
-              
-                        <label>Name:</label>
-                        <input type="text" name="name" required >
-                  
-
-                        <label>Description:</label>
-                        <input type="text" name="description" required >
+            <form action = "CreateNewDishServlet" method = "post" style="width: 100%">       
+                        <label>Name<span style="color: red;">*</span></label>
+                        <input type="text" name="name" required placeholder="e.g., Banh mi">
                  
-
-
-                        <label>Price</label>
-                        <input type="number" name="price" min="0" step="0.01" required >
-                   
-
+                        <label>Price<span style="color: red;">*</span></label>
+                        <input type="number" name="price" min="0.01" step="0.01" required placeholder="e.g., 12.3">
    
-                        <label>Category</label>
+                        <label>Category<span style="color: red;">*</span></label>
                         <select name="category" required >
                             <option value="appetizer">Appetizer</option>
                             <option value="mainDish">Main Dish</option>
@@ -56,9 +47,10 @@
                             <option value="dessert">Dessert</option>
                         </select>
                  
+                        <label>Description<span style="color: red;">*</span></label>
+                        <input type="text" name="description" required >
 
-                
-            <button type = "submit">Confirm</button>
+            <button type = "submit">Add new dish</button>
         </form>
         </div>
        

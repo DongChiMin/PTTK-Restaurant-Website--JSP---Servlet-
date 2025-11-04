@@ -33,14 +33,12 @@ public class CreateReservationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//Các biến cần để hiển thị trên giao diện
+        //Các biến cần để hiển thị trên giao diện
         String[] selectedTableIds = request.getParameterValues("selectedTableIds");
         String bookingTime = request.getParameter("bookingTime");
         String endTime = request.getParameter("endTime");
         String bookingDate = request.getParameter("bookingDate");
         String phoneNumber = request.getParameter("phoneNumber");
-        
-        //Lấy danh sách bàn đã chọn trước đó
         TableDAO tableDAO = new TableDAO();
         selectedTableList.clear();
         for (String tableId : selectedTableIds) {

@@ -32,7 +32,7 @@
                 endTime = "";
             }
             if (bookingDate == null) {
-                bookingDate = "";
+                bookingDate = ""; 
             }
         %>
         <!-- Navbar -->
