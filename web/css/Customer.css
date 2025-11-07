@@ -108,13 +108,18 @@ input, select {
   transition: border 0.3s ease-in-out;
 }
 
+input .selected {
+    background-color: #2a3b55;
+}
+
+
 input:focus {
-  border-color: #4f46e5;
+  border-color: #2a3b55;
   outline: none;
 }
 
 select:focus{
-  border-color: #4f46e5;
+  border-color: #2a3b55;
   outline: none;
 }
 
@@ -135,18 +140,18 @@ button:hover {
 }
 
 .btn-cancel{
-  background: #f1d7d8;
+  background: #f8e1e1;
   color: #4b2829;
   padding: 10px 24px;
   font-weight: 600;
-  border: 1px solid #f1d7d8;
-  filter: drop-shadow(0 0px 0px #f1d7d8);
+  border: 1px solid #f8e1e1;
+  filter: drop-shadow(0 0px 0px #f8e1e1);
   cursor: pointer;
   transition: background 0.3s ease;
 }
 
 .btn-cancel:hover{
-    background: #e0b0b2;
+    background: #f4d1d1;
 }
 
 button[type="submit"]:disabled {      
@@ -186,8 +191,8 @@ table th, table td {
 }
 
 table th {
-  background: #f8fafc;
-  font-weight: 900;
+  background: #e9ecef;
+  font-weight: 400;
   color: linear-gradient(90deg, #7084a3, #1e293b);
 }
 
