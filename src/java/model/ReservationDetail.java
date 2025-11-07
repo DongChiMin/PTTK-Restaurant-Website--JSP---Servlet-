@@ -10,40 +10,40 @@ package model;
  */
 public class ReservationDetail {
     private int id;
-    private int tblReservationid;
-    private int tblTableid;
+    private Reservation reservation;
+    private Table table;
 
     public ReservationDetail() {
     }
 
-    public ReservationDetail(int id, int tblReservationid, int tblTableid) {
+    public ReservationDetail(int id, Reservation reservation, Table table) {
         this.id = id;
-        this.tblReservationid = tblReservationid;
-        this.tblTableid = tblTableid;
+        this.reservation = reservation;
+        this.table = table;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getTblReservationid() {
-        return tblReservationid;
+    public Reservation getReservation() {
+        return reservation;
     }
 
-    public int getTblTableid() {
-        return tblTableid;
+    public Table getTable() {
+        return table;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setTblReservationid(int tblReservationid) {
-        this.tblReservationid = tblReservationid;
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
     }
 
-    public void setTblTableid(int tblTableid) {
-        this.tblTableid = tblTableid;
+    public void setTable(Table table) {
+        this.table = table;
     }
     
     

@@ -17,12 +17,12 @@ public class TableDAO {
     
     private Connection conn;
 
-    public TableDAO() {
-        this.conn = DBUtil.getConnection();
+    public TableDAO(Connection conn) {
+        this.conn = conn;
     }
 
     //Lấy danh sách các bàn trống trong khoảng thời gian bookingTime + 3 tiếng
-    public List<Table> getAvailableTables(LocalDateTime bookingTime) throws SQLException {
+    public List<Table> getAvailableTables(LocalDateTime bookingTime){
         List<Table> tableList = new ArrayList<>();
 
         //SQL thêm r.status = 'confirmed' --> để chỉ lọc nhưng bàn đã confirm
@@ -36,7 +36,6 @@ public class TableDAO {
                 WHERE r.bookingTime >= DATE_SUB(?, INTERVAL 3 HOUR)
             	AND r.bookingTime <= DATE_ADD(?, INTERVAL 3 HOUR)
                 )
-
                      """;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, bookingTime.toString());
@@ -52,6 +51,8 @@ public class TableDAO {
                 tableList.add(t);
             }
 
+        } catch (SQLException ex) {
+            Logger.getLogger(TableDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return tableList;
     }
@@ -65,7 +66,7 @@ public class TableDAO {
                      WHERE t.id = ?
                      """;
 
-        try (Connection conn = DBUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
 

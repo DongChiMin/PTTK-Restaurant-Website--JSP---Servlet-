@@ -6,13 +6,13 @@ package dao;
 
 import model.Reservation;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.Timestamp;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import util.DBUtil;
+import model.Customer;
 
 /**
  *
@@ -22,44 +22,42 @@ public class ReservationDAO {
 
     private Connection conn;
     
-    public ReservationDAO() {
-        this.conn = DBUtil.getConnection();
+    public ReservationDAO(Connection conn) {
+        this.conn = conn;
     }
 
-    public int insertReservation(Reservation reservation) {
+    public boolean insertReservation(Reservation newReservation) {
         String sql = """
         INSERT INTO tblReservation (bookingTime, note, status, tblCustomerid)
         VALUES (?, ?, ?, ?)
     """;
 
-        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            LocalDateTime bookingTime = newReservation.getBookingTime();
+            String note = newReservation.getNote();
+            String status = newReservation.getStatus();
+            Customer customer = newReservation.getCustomer();
+            
             // Chuyển LocalDateTime sang Timestamp để lưu vào DB
-            ps.setTimestamp(1, java.sql.Timestamp.valueOf(reservation.getBookingTime()));
+            ps.setTimestamp(1, Timestamp.valueOf(bookingTime));
             //Kiểm tra note nếu rỗng thì set null vào CSDL
-            String note = reservation.getNote();
             if(note != null && !note.isEmpty()){
                 ps.setString(2, note);
             }
             else{
                 ps.setNull(2, java.sql.Types.VARCHAR);
-            }
-            
-            ps.setString(3, reservation.getStatus());
-            ps.setInt(4, reservation.getTblCustomerid());
+            }      
+            ps.setString(3, status);
+            ps.setInt(4, customer.getId());
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    return rs.getInt(1); // Trả về reservationId vừa tạo
-                }
+                return true;
             }
         } catch (SQLException ex) {
             Logger.getLogger(ReservationDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        return -1;
+        return false;
     }
 
 }

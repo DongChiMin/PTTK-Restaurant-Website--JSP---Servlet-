@@ -13,7 +13,6 @@ import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Customer;
-import util.DBUtil;
 
 /**
  *
@@ -23,8 +22,8 @@ public class CustomerDAO {
     
     private Connection conn;
 
-    public CustomerDAO() {
-        this.conn = DBUtil.getConnection();
+    public CustomerDAO(Connection conn) {
+        this.conn = conn;
     }
 
     //Lấy khách hàng theo số điện thoại định danh, nếu không tìm thấy (chưa tồn tại trong CSDL) thì trả null
@@ -99,7 +98,7 @@ public class CustomerDAO {
                      SELECT * FROM tblCustomer c
                      WHERE c.email = ?
                      """;
-        try (Connection conn = DBUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
 
@@ -127,27 +126,25 @@ public class CustomerDAO {
         }
     }
 
-    public int insertCustomer(Customer newCustomer) {
+    public boolean insertCustomer(Customer newCustomer) {
         String sql = """
                  INSERT INTO tblCustomer (name, phoneNumber, email, dateOfBirth)
                  VALUES (?, ?, ?, ?)
                  """;
 
-        try (Connection conn = DBUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             LocalDate dob = newCustomer.getDateOfBirth();
             String email = newCustomer.getEmail();
             
             ps.setString(1, newCustomer.getName());
             ps.setString(2, newCustomer.getPhoneNumber());
-          
             //Kiểm tra email null
-            if(email != null){
+            if(email != null && !email.isEmpty()){
                   ps.setString(3, email);
             }
             else{
                 ps.setNull(3, java.sql.Types.VARCHAR);
             }
-            
             //Kiểm tra ngày sinh null
             if (dob != null) {
                 ps.setDate(4, java.sql.Date.valueOf(dob));
@@ -155,17 +152,14 @@ public class CustomerDAO {
                 ps.setNull(4, java.sql.Types.DATE);
             }
 
-            //Nếu lưu thành công, trả về id. Nếu không thì trả về -1
+            //Nếu lưu thành công, trả về true. Nếu không thì trả về false
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    return rs.getInt(1); // Trả về reservationId vừa tạo
-                }
+                return true;
             }
         } catch (SQLException ex) {
             Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return -1;
+        return false;
     }
 }

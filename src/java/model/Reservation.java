@@ -15,17 +15,17 @@ public class Reservation {
     private LocalDateTime bookingTime;
     private String note;
     private String status;
-    private int tblCustomerid;
+    private Customer customer;
 
     public Reservation() {
     }
 
-    public Reservation(int id, LocalDateTime bookingTime, String note, String status, int tblCustomerid) {
+    public Reservation(int id, LocalDateTime bookingTime, String note, String status, Customer customer) {
         this.id = id;
         this.bookingTime = bookingTime;
         this.note = note;
         this.status = status;
-        this.tblCustomerid = tblCustomerid;
+        this.customer = customer;
     }
 
     public int getId() {
@@ -44,8 +44,8 @@ public class Reservation {
         return status;
     }
 
-    public int getTblCustomerid() {
-        return tblCustomerid;
+    public Customer getCustomer() {
+        return customer;
     }
 
     public void setId(int id) {
@@ -64,8 +64,8 @@ public class Reservation {
         this.status = status;
     }
 
-    public void setTblCustomerid(int tblCustomerid) {
-        this.tblCustomerid = tblCustomerid;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
     
     

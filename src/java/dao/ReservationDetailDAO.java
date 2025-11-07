@@ -10,33 +10,42 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import util.DBUtil;
+import model.Reservation;
+import model.Table;
+
 /**
  *
  * @author namv2
  */
 public class ReservationDetailDAO {
+
     private Connection conn;
 
-    public ReservationDetailDAO() {
-        this.conn = DBUtil.getConnection();
+    public ReservationDetailDAO(Connection conn) {
+        this.conn = conn;
     }
-    
-    public void insertReservationDetail(ReservationDetail newReservationDetail) {
-    String sql = """
+
+    public boolean insertReservationDetail(ReservationDetail newReservationDetail) {
+        String sql = """
         INSERT INTO tblReservationDetail (tblReservationid, tblTableid)
         VALUES (?, ?)
     """;
 
-    try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            Reservation reservation = newReservationDetail.getReservation();
+            Table table = newReservationDetail.getTable();
 
-        ps.setInt(1, newReservationDetail.getTblReservationid());
-        ps.setInt(2, newReservationDetail.getTblTableid());
+            ps.setInt(1, reservation.getId());
+            ps.setInt(2, table.getId());
 
-        ps.executeUpdate();
-    } catch (SQLException ex) {
-        Logger.getLogger(ReservationDetailDAO.class.getName()).log(Level.SEVERE, null, ex);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ReservationDetailDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
-}
 
 }
