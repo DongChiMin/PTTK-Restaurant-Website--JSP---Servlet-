@@ -7,7 +7,9 @@ package dao;
 import model.ReservationDetail;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Reservation;
@@ -25,13 +27,13 @@ public class ReservationDetailDAO {
         this.conn = conn;
     }
 
-    public boolean insertReservationDetail(ReservationDetail newReservationDetail) {
+    public int insertReservationDetail(ReservationDetail newReservationDetail) {
         String sql = """
         INSERT INTO tblReservationDetail (tblReservationid, tblTableid)
         VALUES (?, ?)
     """;
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             Reservation reservation = newReservationDetail.getReservation();
             Table table = newReservationDetail.getTable();
 
@@ -40,12 +42,15 @@ public class ReservationDetailDAO {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
-                return true;
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt(1); // Trả về reservationId vừa tạo
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(ReservationDetailDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;
+        return -1;
     }
 
 }

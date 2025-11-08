@@ -7,6 +7,8 @@ package dao;
 import model.Reservation;
 import java.sql.Connection;
 import java.sql.Timestamp;
+import java.sql.Statement;
+import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -26,13 +28,13 @@ public class ReservationDAO {
         this.conn = conn;
     }
 
-    public boolean insertReservation(Reservation newReservation) {
+    public int insertReservation(Reservation newReservation) {
         String sql = """
         INSERT INTO tblReservation (bookingTime, note, status, tblCustomerid)
         VALUES (?, ?, ?, ?)
     """;
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             LocalDateTime bookingTime = newReservation.getBookingTime();
             String note = newReservation.getNote();
             String status = newReservation.getStatus();
@@ -52,12 +54,15 @@ public class ReservationDAO {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
-                return true;
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt(1); // Trả về reservationId vừa tạo
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(ReservationDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;
+        return -1;
     }
 
 }
