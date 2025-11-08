@@ -45,7 +45,7 @@
             <div class="card left">
                 <h2 style="font-size: 36px">Book a Reservation</h2>
                 <p style="text-align: center">Please follow the steps below to complete your reservation.</p>
-                
+
                 <div style="margin-top: 40px">
                     <div class="timeline">
                         <div class="step active">
@@ -61,30 +61,30 @@
 
                 </div>
             </div>
-            <div style="width: 70%">
-                <div style="margin-top: 30px">
-                    <form id="bookingTimeForm" action="SelectAvailableTablesServlet" method="get">
-                        <div>
-                            <label>Search available tables<span style="color: red;">*</span></label>
-                            <div style="display: flex; gap:20px; margin-top: 10px">
-                                <input type="date" id="date" name="bookingDate" value="<%=bookingDate%>" required>
-                                <input type="time" id="time" name="bookingTime" value="<%=bookingTime%>" required>
-                                <button type="submit">Search table</button>
-                            </div>
+            <div class="card right" style="width: 70%">
+                <form id="bookingTimeForm" action="SelectAvailableTablesServlet" method="get">
+                    <div>
+                        <label>Search available tables<span style="color: red;">*</span></label>
+                        <div style="display: flex; gap:20px; margin-top: 10px">
+                            <input type="date" id="date" name="bookingDate" value="<%=bookingDate%>" required>
+                            <input type="time" id="time" name="bookingTime" value="<%=bookingTime%>" required>
+                            <button type="submit">Search table</button>
                         </div>
-                    </form>
-                    <form id = "tableForm" action = "CreateReservationServlet" method = "get">
-                        <div>
-                            <%
-                                if (bookingTime.isEmpty()) {
+                    </div>
+                </form>
+                <form id = "tableForm" action = "CreateReservationServlet" method = "get">
+                    <div>
+                        <%
+                            if (bookingTime.isEmpty()) {
 
-                                } else if (tableList != null && !tableList.isEmpty()) {
-                            %>
-                            <label>Select tables<span style="color: red;">*</span></label>
-                            <div style="margin-top: 10px">
-                                <p style="font-style: italic; margin-bottom: 5px">List of available tables for <strong><%=bookingDate%></strong> at <strong><%=bookingTime%> - <%=endTime%></strong>:</p>
+                            } else if (tableList != null && !tableList.isEmpty()) {
+                        %>
+                        <label>Select tables<span style="color: red;">*</span></label>
+                        <div style="margin-top: 10px">
+                            <p style="font-style: italic; margin-bottom: 5px">List of available tables for <strong><%=bookingDate%></strong> at <strong><%=bookingTime%> - <%=endTime%></strong>:</p>
 
-                                <table border="1">
+                            <table border="1" id="tableList">
+                                <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>Table name</th>
@@ -92,16 +92,15 @@
                                         <th>Capacity</th>
                                         <th>Select</th>
                                     </tr>
-                                    <%
-                                        for (Table table : tableList) {
-                                    %>
+                                </thead>
+                                <tbody>
+                                    <% for (Table table : tableList) {%>
                                     <tr>
                                         <td><%= table.getId()%></td>
                                         <td><%= table.getName()%></td>
                                         <td><%= table.getLocation()%></td>
                                         <td><%= table.getCapacity()%></td>
                                         <td>
-                                            <!--Kiểm tra xem bàn đã được chọn thì hiển thị checkbox đã chọn (Trường hợp quay lại từ trang confirm để chọn thêm bàn)-->
                                             <%
                                                 boolean isSelected = false;
                                                 if (selectedTableIds != null) {
@@ -116,44 +115,48 @@
                                             <input type="checkbox" name="selectedTableIds" value="<%= table.getId()%>" class="table-checkbox" <%= isSelected ? "checked" : ""%> >
                                         </td>
                                     </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
 
-                                    <%
-                                        }
-                                    %>
-                                </table>
+                            <div id="pagination"></div>
+
+                            <%
+                            } else {
+                            %>
+                            <p style="color : red; text-align: center;">No table available, please try again.</p>
+                            <%
+                                }
+                            %>
+                            <input type="hidden" name="bookingTime" value="<%= bookingTime%>">
+                            <input type="hidden" name="endTime" value="<%=endTime%>">
+                            <input type="hidden" name="bookingDate" value="<%= bookingDate%>">
+
+                            <div style="height: 2px; background-color: #e0e0e0; margin: 25px 0;"></div>
+
+                            <div style="display: flex; justify-content: flex-start; align-items: center; margin-top: 20px; gap:20px;">
+                                <button type="button" onclick="window.location.href = 'MenuCustomerServlet'" class="btn-cancel">< Go back</button>
+                                <%
+                                    if ((tableList != null && tableList.isEmpty()) || bookingTime.isEmpty()) {
+                                %>
+                                <button type = "submit" name="action" value="loadReservationPage" disabled> Continue </button>
                                 <%
                                 } else {
                                 %>
-                                <p style="color : red; text-align: center;">No table available, please try again.</p>
+                                <button type = "submit" name="action" value="loadReservationPage"> Continue </button>
                                 <%
                                     }
                                 %>
-                                <input type="hidden" name="bookingTime" value="<%= bookingTime%>">
-                                <input type="hidden" name="endTime" value="<%=endTime%>">
-                                <input type="hidden" name="bookingDate" value="<%= bookingDate%>">
-                                <div style="display: flex; justify-content: flex-start; align-items: center; margin-top: 20px; gap:20px;">
-                                    <button type="button" onclick="window.location.href = 'MenuCustomerServlet'" class="btn-cancel">< Go back</button>
-                                    <%
-                                        if ((tableList != null && tableList.isEmpty()) || bookingTime.isEmpty()) {
-                                    %>
-                                    <button type = "submit" name="action" value="loadReservationPage" disabled> Continue </button>
-                                    <%
-                                    } else {
-                                    %>
-                                    <button type = "submit" name="action" value="loadReservationPage"> Continue </button>
-                                    <%
-                                        }
-                                    %>
-                                </div>
                             </div>
-
                         </div>
 
+                    </div>
 
 
-                    </form>
 
-                </div>
+                </form>
+
+
             </div>
         </div>
 
@@ -227,6 +230,60 @@
 //                    }
 //                }
 //                );
+        </script>
+
+        <!--Phân trang-->
+        <script>
+            const rowsPerPage = 4;
+            const table = document.getElementById("tableList");
+            const tbody = table.querySelector("tbody");
+            const rows = Array.from(tbody.querySelectorAll("tr"));
+            const pagination = document.getElementById("pagination");
+
+            let currentPage = 1;
+            const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+            function showPage(page) {
+                currentPage = page;
+                const start = (page - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+
+                rows.forEach((row, index) => {
+                    row.style.display = (index >= start && index < end) ? "" : "none";
+                });
+
+                renderPagination();
+            }
+
+            function renderPagination() {
+                pagination.innerHTML = "";
+
+                // Previous button
+                const prev = document.createElement("button");
+                prev.textContent = "Prev";
+                prev.disabled = currentPage === 1;
+                prev.onclick = () => showPage(currentPage - 1);
+                pagination.appendChild(prev);
+
+                // Page numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement("button");
+                    btn.textContent = i;
+                    btn.disabled = i === currentPage;
+                    btn.onclick = () => showPage(i);
+                    pagination.appendChild(btn);
+                }
+
+                // Next button
+                const next = document.createElement("button");
+                next.textContent = "Next";
+                next.disabled = currentPage === totalPages;
+                next.onclick = () => showPage(currentPage + 1);
+                pagination.appendChild(next);
+            }
+
+            // Initialize
+            showPage(1);
         </script>
     </body>
 </html>

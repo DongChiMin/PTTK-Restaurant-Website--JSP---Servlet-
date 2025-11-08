@@ -33,18 +33,23 @@ public class CreateReservationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+
         //Các biến cần để hiển thị trên giao diện
         String[] selectedTableIds = request.getParameterValues("selectedTableIds");
         String bookingTime = request.getParameter("bookingTime");
         String endTime = request.getParameter("endTime");
         String bookingDate = request.getParameter("bookingDate");
         String phoneNumber = request.getParameter("phoneNumber");
-        TableDAO tableDAO = new TableDAO();
-        selectedTableList.clear();
-        for (String tableId : selectedTableIds) {
-            System.out.println(tableId);
-            Table t = tableDAO.getTableById(tableId);
-            selectedTableList.add(t);
+        TableDAO tableDAO = new TableDAO(DBUtil.getConnection());
+        if (selectedTableIds != null) {
+            selectedTableList.clear();
+            for (String tableId : selectedTableIds) {
+                Table t = tableDAO.getTableById(tableId);
+                selectedTableList.add(t);
+            }
         }
 
         //Các trường hợp xử lý theo nút bấm
@@ -55,7 +60,7 @@ public class CreateReservationServlet extends HttpServlet {
                 request.setAttribute("phoneNumberEntered", false);
             }
             case "search" -> {
-                CustomerDAO customerDAO = new CustomerDAO();
+                CustomerDAO customerDAO = new CustomerDAO(DBUtil.getConnection());
                 phoneNumber = request.getParameter("phoneNumber");
 
                 customer = customerDAO.getCustomerByPhone(phoneNumber);
@@ -73,7 +78,6 @@ public class CreateReservationServlet extends HttpServlet {
 
         //Set thuộc tính cho request để hiển thị trong trường hợp search hoặc reset
         request.setAttribute("endTime", endTime);
-        request.setAttribute("selectedTableIds", selectedTableIds);
         request.setAttribute("selectedTableList", selectedTableList);
         request.setAttribute("bookingTime", bookingTime);
         request.setAttribute("bookingDate", bookingDate);
@@ -87,6 +91,10 @@ public class CreateReservationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+
         //Các thông tin về đặt bàn
         String bookingTime = request.getParameter("bookingTime");
         String bookingDate = request.getParameter("bookingDate");
@@ -101,34 +109,28 @@ public class CreateReservationServlet extends HttpServlet {
         //Nếu trong trang có thông tin customer rồi thì set customerId luôn, nếu không thì gán -1
         int customerId = customerIdString != null ? Integer.parseInt(customerIdString) : -1;
 
-        //Khai báo DAO 
-        CustomerDAO customerDAO = new CustomerDAO();
-        ReservationDAO reservationDAO = new ReservationDAO();
-        ReservationDetailDAO reservationDetailDAO = new ReservationDetailDAO();
-
         //BẮT ĐẦU TRANSACTION        
         Connection conn = null;
         try {
             conn = DBUtil.getConnection();
+            //Khai báo DAO 
+            CustomerDAO customerDAO = new CustomerDAO(conn);
+            ReservationDAO reservationDAO = new ReservationDAO(conn);
+            ReservationDetailDAO reservationDetailDAO = new ReservationDetailDAO(conn);
             // 1. Lấy kết nối và tắt auto-commit để thực hiện transaction
             conn.setAutoCommit(false); // Tắt auto-commit để kiểm soát transaction
 
             //2. nếu id = -1 (Trên trang không có đối tượng customer) thì phải tạo mới và lưu vào CSDL
             if (customerId == -1) {
-                if(email != null){
-                    if(email.isEmpty()){
-                        email = null;
-                    }
-                    else{
+                if (email != null && !email.isEmpty()) {
                     //kiểm tra email đã tồn tại chưa, nếu đã tồn tại thì quay lại trang và thông báo
-                        Customer checkEmail = customerDAO.getCustomerByEmail(email);
-                        if(checkEmail != null){
-                            request.setAttribute("phoneNumberEntered", true);
-                            request.setAttribute("emailError", "This email address is already in use.");
-                            doGet(request, response);
-                            return;
-                        }
-                        
+                    Customer checkEmail = customerDAO.getCustomerByEmail(email);
+                    if (checkEmail != null) {
+                        request.setAttribute("phoneNumberEntered", true);
+                        request.setAttribute("emailError", "This email address is already in use.");
+                        request.setAttribute(name, conn);
+                        doGet(request, response);
+                        return;
                     }
                 }
                 customer = new Customer(
@@ -137,7 +139,9 @@ public class CreateReservationServlet extends HttpServlet {
                         phoneNumber,
                         email,
                         (dateOfBirth != null && !dateOfBirth.isEmpty()) ? LocalDate.parse(dateOfBirth) : null);
-                customerId = customerDAO.insertCustomer(customer);
+                customerDAO.insertCustomer(customer);
+            } else {
+                customer = customerDAO.getCustomerById(customerId);
             }
 
             //3. Lưu đối tượng reservation
@@ -146,12 +150,13 @@ public class CreateReservationServlet extends HttpServlet {
                     LocalDateTime.of(LocalDate.parse(bookingDate), LocalTime.parse(bookingTime)),
                     note,
                     "pending",
-                    customerId);
+                    customer);
             int reservationId = reservationDAO.insertReservation(reservation);
+            reservation.setId(reservationId);
 
             //4. Lưu đối tượng reservationDetail
             for (Table t : selectedTableList) {
-                ReservationDetail rDetail = new ReservationDetail(0, reservationId, t.getId());
+                ReservationDetail rDetail = new ReservationDetail(0, reservation, t);
                 reservationDetailDAO.insertReservationDetail(rDetail);
             }
 
@@ -181,7 +186,5 @@ public class CreateReservationServlet extends HttpServlet {
                 }
             }
         }
-
     }
-
 }

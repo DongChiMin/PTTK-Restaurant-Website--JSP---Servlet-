@@ -22,7 +22,6 @@
             String bookingDate = (String) request.getAttribute("bookingDate");
             String bookingTime = (String) request.getAttribute("bookingTime");
             String endTime = (String) request.getAttribute("endTime");
-            String[] selectedTableIds = (String[]) request.getAttribute("selectedTableIds");
             List<Table> selectedTableList = (List<Table>) request.getAttribute("selectedTableList");
 
             //Các biến xử lý trong trang
@@ -59,13 +58,13 @@
                     <div class="timeline">
                         <div class="step">
                             <span class="circle"></span>
-                            <span class="label">Select Tables</span>
+                            <span class="label">Select Tables ✔</span>
 
                         </div>
                         <div class="step active">
                             <span class="circle"></span>
                             <span class="label">Fill Information</span>
-                            <p style="margin-left: 10px; font-style: italic; font-size: 16px; color:black">Available Hours: 08:00 - 23:00. Each table will be reserved for 3 hours.</p>
+                            <p style="margin-left: 10px; font-style: italic; font-size: 16px; color:black">Enter your phone number to search for an existing profile or create a new one then confirm the reservation.</p>
                         </div>
                     </div>
 
@@ -73,6 +72,39 @@
             </div>
 
             <div class="card right">
+                <div style="display: flex; justify-content: space-between; gap:20px">
+                    <div>
+                        <label>Booking time<span style="color: red;">*</span></label>
+                        <div style="display: flex; gap:20px; margin-top: 10px">
+                            <input type="date" id="date" name="bookingDate" value="<%=bookingDate%>" readonly
+                                   style="background-color: #e9ecef; cursor: not-allowed; width: 100%">
+                            <input type="time" id="time" name="bookingTime" value="<%=bookingTime%>" readonly
+                                   style="background-color: #e9ecef; cursor: not-allowed; width: 100%">
+                        </div>
+                    </div>
+
+                    <div style="width: 100%">
+                        <label >Booking Table<span style="color: red;">*</span></label>
+                        <div>
+                            <%
+                                StringBuilder tableSummary = new StringBuilder();
+                                for (int i = 0; i < selectedTableList.size(); i++) {
+                                    Table table = selectedTableList.get(i);
+                                    tableSummary.append(table.getName());
+                                    if (i < selectedTableList.size() - 1) {
+                                        tableSummary.append(" + ");
+                                    }
+                                }
+                            %>
+                            <input value="<%=tableSummary.toString()%>" readonly
+                                   style="background-color: #e9ecef; cursor: not-allowed; margin-top: 10px; width: 100%">
+                        </div>
+
+                    </div>
+                </div>
+
+                <div style="height: 2px; background-color: #e0e0e0; margin: 25px 0;"></div>
+
                 <!--phần form nhập số điện thoại-->
                 <form id="phoneNumberForm" action = "CreateReservationServlet" method = "get">
                     <!--Các biến ẩn cần gửi--> 
@@ -80,9 +112,9 @@
                     <input hidden name="endTime" value="<%= endTime%>">
                     <input hidden name="bookingDate" value="<%=bookingDate%>">
                     <%
-                        for (String s : selectedTableIds) {
+                        for (Table t : selectedTableList) {
                     %>
-                    <input hidden name="selectedTableIds" value="<%=s%>">
+                    <input hidden name="selectedTableIds" value="<%=t.getId()%>">
                     <%
                         }
                     %>
@@ -106,23 +138,14 @@
                         </div>
                     </div>
                 </form>
-                <!--Nếu không tồn tại sdt thì hiển thị thông báo nhỏ-->   
-                <%
-                    if (phoneNumberEntered) {
-
-                        if (customer == null) {
-                %>
-                <p>No information detected for this phone number. Please create a new customer profile.</p>
-                <%
-                        }
-                    }
-                %>
 
                 <!--Phần form điền thông tin để submit-->
-                <form id="reservationForm" action = "CreateReservationServlet" method = "post">  
+                <form id="reservationForm" action = "CreateReservationServlet" method = "post" style="margin-bottom: 0px">  
                     <input hidden name="bookingTime" value="<%= bookingTime%>">
                     <input hidden name="endTime" value="<%= endTime%>">
                     <input hidden name="bookingDate" value="<%=bookingDate%>">
+                    <input hidden name="action" id="hiddenAction" value="">
+
                     <%
                         //Nếu chưa nhập sdt: không hiển thị các ô thông tin
                         //Nếu đã nhập sdt (sdt không tồn tại trong hệ thống): Hiển thị các trường thông tin tạo khách hàng mới
@@ -130,26 +153,24 @@
                         if (phoneNumberEntered) {
 
                             if (customer == null) {
-                    %>
+                    %>  
 
                     <div style="display: flex; justify-content: space-between; gap:20px">
                         <input hidden id="phoneNumber" type="text" name="phoneNumber" value="<%=phoneNumber%>">
 
-                        <div>     
+                        <div style="width: 35%">     
                             <label>Name<span style="color: red;">*</span></label><br>
-                            <input type="text" name="name" required style="margin-top: 10px; width: 300px">
-                        </div>     
-                    </div>    
+                            <input id="nameInput" type="text" name="name" required style="margin-top: 10px; width: 100%">
+                        </div>  
 
-                    <div style="display: flex; justify-content: space-between; gap:20px">
-                        <div>
+                        <div style="width: 35%">
                             <label>Email</label><br>
-                            <input type="text" name="email" style="margin-top: 10px;  width: 300px">
+                            <input type="text" name="email" style="margin-top: 10px; width: 100%">
                         </div>
 
-                        <div>
+                        <div style="width: 30%">
                             <label>Date of Birth</label><br>
-                            <input type="date" name="dateOfBirth" style="margin-top: 10px;  width: 300px">
+                            <input type="date" name="dateOfBirth" style="margin-top: 10px; width: 100%">
                         </div>
                     </div>
                     <%
@@ -161,83 +182,42 @@
 
                     <div style="display: flex; justify-content: space-between; gap:20px">
 
-
-                        <div>       
+                        <div style="width: 50%">       
                             <label>Name<span style="color: red;">*</span></label><br>
-                            <input type="text" name="name" value="<%=customer.getName()%>" readonly
-                                   style="background-color: #e9ecef; cursor: not-allowed; margin-top: 10px; width: 300px">
+                            <input id="nameInput" type="text" name="name" value="<%=customer.getName()%>" readonly
+                                   style="background-color: #e9ecef; cursor: not-allowed; margin-top: 10px; width: 100%">
                         </div>
 
-                        <div>
+                        <div style="width: 50%">
                             <label>Email<span style="color: red;">*</span></label><br>
                             <input type="text" name="email" value="<%=hiddenEmail%>" readonly
-                                   style="background-color: #e9ecef; cursor: not-allowed; margin-top: 10px; width: 300px">
+                                   style="background-color: #e9ecef; cursor: not-allowed; margin-top: 10px; width: 100%">
                         </div>
                     </div>
-
-
 
                     <%
                         }
 
                     %>
+
                     <div>
-                        <label >Selected Table<span style="color: red;">*</span></label>
-                        <table border="1" style="margin-top: 10px">
-                            <tr>
-                                <th>ID</th>
-                                <th>Table name</th>
-                                <th>Location</th>
-                                <th>Capacity</th>
-                            </tr>
-                            <%                                
-                                for (Table table : selectedTableList) {
-                            %>
-                            <tr>
-                            <input hidden name="selectedTableIds" value="<%=table.getId()%>">
-                            <td><%= table.getId()%></td>
-                            <td><%= table.getName()%></td>
-                            <td><%= table.getLocation()%></td>
-                            <td><%= table.getCapacity()%></td>
-                            </tr>
-
-                            <%
-                                }
-                            %>
-                        </table>
+                        <label>Reservation note</label>
+                        <div style="margin-top: 10px;">
+                            <textarea name="note" style="width: 100%; height: 100px; resize: vertical; padding: 8px;"></textarea>
+                        </div>
                     </div>
 
-                    <div style="display: flex; justify-content: space-between">
-
-                        <div>
-                            <label>Booking Time<span style="color: red;">*</span></label>
-                            <div style="margin-top: 10px; padding: 8px 0px">
-                                <span><%= bookingDate%> (<%= bookingTime%> - <%= endTime%>)</span>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label>Note</label>
-                            <div style="margin-top: 10px;">
-                                <input type="text" name="note" style="width: 300px">
-                            </div>
-
-                        </div>
-
-
-                    </div>
-
-                    <%
-                    } else {
+                    <%                    } else {
                     %>
                     <input hidden id="phoneNumber" value="">
-
-
 
                     <%
                         }
                     %>
                 </form>
+
+                <div style="height: 2px; background-color: #e0e0e0; margin: 25px 0;"></div>
+
                 <div style="display: flex; justify-content: flex-start; align-items: center; gap:20px;">
                     <!--Nút quay lại trang trước đó-->
 
@@ -254,7 +234,17 @@
                         <button type = "submit" class="btn-cancel">< Go back</button>
                     </form>
 
-                    <button type= "submit" name="action" value="submit" onclick="document.getElementById('reservationForm').submit();">Confirm</button>
+                    <%
+                        if (phoneNumberEntered) {
+                    %>
+                    <button type= "submit" name="action" value="submit" onclick="validateAndSubmit()">Confirm</button>
+                    <%
+                    } else {
+                    %>
+                    <button type= "submit" name="action" value="submit" onclick="validateAndSubmit()" disabled>Confirm</button>
+                    <%
+                        }
+                    %>
                 </div>
 
 
@@ -263,17 +253,23 @@
 
         <!--kiểm tra trước khi submit đã nhập sdt chưa-->
         <script>
-            const form = document.getElementById('reservationForm');
-            form.addEventListener('submit', function (event) {
+            function validateAndSubmit() {
                 const phoneInput = document.getElementById("phoneNumber");
-                const phoneNumber = phoneInput.value.trim();
+                const nameInput = document.getElementById("nameInput");
+                const phoneValue = phoneInput.value.trim();
+                const nameValue = nameInput.value.trim();
 
-                if (phoneNumber === "") {
+                if (phoneValue === "") {
                     alert("Please search by phone number before submit");
-                    event.preventDefault(); // Chặn submit
                     return;
                 }
-            });
+                if(nameValue === ""){
+                    alert("Please enter name before submit");
+                    return;
+                }
+                
+                document.getElementById('reservationForm').submit();
+            }
         </script>
         <!--Kiểm tra nếu có lỗi email tồn tại-->
         <%

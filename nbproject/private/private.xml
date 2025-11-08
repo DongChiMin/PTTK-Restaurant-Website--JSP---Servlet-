@@ -3,7 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/web/WEB-INF/Customer/ICreateReservation.jsp</file>
+            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/web/WEB-INF/Manager/IManageDishes.jsp</file>
+            <file>file:/D:/School/MonHoc/PTTK/PTTK-Restaurant-Website--JSP---Servlet-/web/WEB-INF/Customer/ISelectAvailableTables.jsp</file>
         </group>
     </open-files>
 </project-private>

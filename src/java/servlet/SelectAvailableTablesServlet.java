@@ -5,11 +5,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Table;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import util.DBUtil;
 
 @WebServlet(name = "SelectAvailableTablesServlet", urlPatterns = {"/SelectAvailableTablesServlet"})
 public class SelectAvailableTablesServlet extends HttpServlet {
@@ -24,6 +22,9 @@ public class SelectAvailableTablesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
 
         //Kiểm tra nếu trong request có thông tin về thời gian đặt bàn (Trường hợp cancel từ trang sau đó hoặc chọn ngày)
         String bookingDate = request.getParameter("bookingDate");
@@ -35,15 +36,11 @@ public class SelectAvailableTablesServlet extends HttpServlet {
             request.setAttribute("bookingDate", bookingDate);
             request.setAttribute("bookingTime", bookingTime);
             request.setAttribute("endTime", endTime.toLocalTime().toString());
-            TableDAO tableDAO = new TableDAO();
+            TableDAO tableDAO = new TableDAO(DBUtil.getConnection());
             List<Table> tableList = new ArrayList<>();
 
-            try {
-                tableList = tableDAO.getAvailableTables(startTime);
-                request.setAttribute("tableList", tableList);
-            } catch (SQLException ex) {
-                Logger.getLogger(SelectAvailableTablesServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            tableList = tableDAO.getAvailableTables(startTime);
+            request.setAttribute("tableList", tableList);
         }
 
         //Kiểm tra nếu trong request có thông tin về bàn đã chọn (Trường hợp quay lại từ trang CreateReservation)
