@@ -15,6 +15,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/Customer.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/all.min.css">
     </head>
     <body>
         <%
@@ -56,14 +57,14 @@
 
                 <div style="margin-top: 40px">
                     <div class="timeline">
-                        <div class="step">
+                        <div class="step completed">
                             <span class="circle"></span>
-                            <span class="label">Select Tables ✔</span>
+                            <span class="label"><i class="fas fa-check"></i> Select Tables</span>
 
                         </div>
                         <div class="step active">
                             <span class="circle"></span>
-                            <span class="label">Fill Information</span>
+                            <span class="label"><i class="fas fa-user-edit"></i> Fill Information</span>
                             <p style="margin-left: 10px; font-style: italic; font-size: 16px; color:black">Enter your phone number to search for an existing profile or create a new one then confirm the reservation.</p>
                         </div>
                     </div>
@@ -74,7 +75,7 @@
             <div class="card right">
                 <div style="display: flex; justify-content: space-between; gap:20px">
                     <div>
-                        <label>Booking time<span style="color: red;">*</span></label>
+                        <label><i class="fa-solid fa-calendar-days"></i> Booking time<span style="color: red;">*</span></label>
                         <div style="display: flex; gap:20px; margin-top: 10px">
                             <input type="date" id="date" name="bookingDate" value="<%=bookingDate%>" readonly
                                    style="background-color: #e9ecef; cursor: not-allowed; width: 100%">
@@ -84,7 +85,7 @@
                     </div>
 
                     <div style="width: 100%">
-                        <label >Booking Table<span style="color: red;">*</span></label>
+                        <label><i class="fa-solid fa-chair"></i> Booking Table(s)<span style="color: red;">*</span></label>
                         <div>
                             <%
                                 StringBuilder tableSummary = new StringBuilder();
@@ -121,7 +122,7 @@
 
                     <!--Nội dung form-->
                     <div>
-                        <label>Phone number (10 digits)<span style="color: red;">*</span></label>
+                        <label><i class="fa-solid fa-phone"></i> Phone number (10 digits)<span style="color: red;">*</span></label>
 
                         <div style="display: flex; gap:20px; margin-top: 10px">
                             <input 
@@ -133,8 +134,8 @@
                                 placeholder="e.g., 0981234567"
                                 <%= (phoneNumber != null && !phoneNumber.isEmpty()) ? "readonly style='background-color: #e9ecef; cursor: not-allowed;'" : ""%> 
                                 />
-                            <button type="submit" name="action" value="reset">Reset</button>
-                            <button type="submit" name="action" value="search">Search</button>
+                            <button type="submit" name="action" value="reset"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+                            <button type="submit" name="action" value="search"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
                         </div>
                     </div>
                 </form>
@@ -159,17 +160,17 @@
                         <input hidden id="phoneNumber" type="text" name="phoneNumber" value="<%=phoneNumber%>">
 
                         <div style="width: 35%">     
-                            <label>Name<span style="color: red;">*</span></label><br>
+                            <label><i class="fa-solid fa-user"></i> Name<span style="color: red;">*</span></label><br>
                             <input id="nameInput" type="text" name="name" required style="margin-top: 10px; width: 100%">
                         </div>  
 
                         <div style="width: 35%">
-                            <label>Email</label><br>
+                            <label><i class="fa-solid fa-envelope"></i> Email</label><br>
                             <input type="text" name="email" style="margin-top: 10px; width: 100%">
                         </div>
 
                         <div style="width: 30%">
-                            <label>Date of Birth</label><br>
+                            <label><i class="fa-solid fa-calendar"></i> Date of Birth</label><br>
                             <input type="date" name="dateOfBirth" style="margin-top: 10px; width: 100%">
                         </div>
                     </div>
@@ -183,13 +184,13 @@
                     <div style="display: flex; justify-content: space-between; gap:20px">
 
                         <div style="width: 50%">       
-                            <label>Name<span style="color: red;">*</span></label><br>
+                            <label><i class="fa-solid fa-user"></i> Name<span style="color: red;">*</span></label><br>
                             <input id="nameInput" type="text" name="name" value="<%=customer.getName()%>" readonly
                                    style="background-color: #e9ecef; cursor: not-allowed; margin-top: 10px; width: 100%">
                         </div>
 
                         <div style="width: 50%">
-                            <label>Email<span style="color: red;">*</span></label><br>
+                            <label><i class="fa-solid fa-envelope"></i> Email<span style="color: red;">*</span></label><br>
                             <input type="text" name="email" value="<%=hiddenEmail%>" readonly
                                    style="background-color: #e9ecef; cursor: not-allowed; margin-top: 10px; width: 100%">
                         </div>
@@ -201,7 +202,7 @@
                     %>
 
                     <div>
-                        <label>Reservation note</label>
+                        <label><i class="fa-solid fa-note-sticky" style="margin-top: 8px;"></i> Reservation note</label>
                         <div style="margin-top: 10px;">
                             <textarea name="note" style="width: 100%; height: 100px; resize: vertical; padding: 8px;"></textarea>
                         </div>
@@ -231,17 +232,17 @@
                         <%
                             }
                         %>
-                        <button type = "submit" class="btn-cancel">< Go back</button>
+                        <button type = "submit" class="btn-cancel"><i class="fas fa-arrow-left"></i>  Go back</button>
                     </form>
 
                     <%
                         if (phoneNumberEntered) {
                     %>
-                    <button type= "submit" name="action" value="submit" onclick="validateAndSubmit()">Confirm</button>
+                    <button type= "submit" name="action" value="submit" onclick="validateAndSubmit()"><i class="fa-solid fa-check"></i> Confirm</button>
                     <%
                     } else {
                     %>
-                    <button type= "submit" name="action" value="submit" onclick="validateAndSubmit()" disabled>Confirm</button>
+                    <button type= "submit" name="action" value="submit" onclick="validateAndSubmit()" disabled><i class="fa-solid fa-check"></i> Confirm</button>
                     <%
                         }
                     %>

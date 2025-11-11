@@ -4,6 +4,8 @@
     Author     : namv2
 --%>
 
+<%@page import="java.time.LocalDate"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.util.Arrays"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="java.util.List"%>
@@ -15,6 +17,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/Customer.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/all.min.css">
     </head>
     <body>
         <%
@@ -34,6 +37,8 @@
             if (bookingDate == null) {
                 bookingDate = "";
             }
+
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         %>
         <!-- Navbar -->
         <nav class="navbar">
@@ -50,12 +55,12 @@
                     <div class="timeline">
                         <div class="step active">
                             <span class="circle"></span>
-                            <span class="label">Select Tables</span>
+                            <span class="label"><i class="fas fa-chair"></i> Select Tables</span>
                             <p style="margin-left: 10px; font-style: italic; font-size: 16px; color:black">Available Hours: 08:00 - 23:00. Each table will be reserved for 3 hours.</p>
                         </div>
                         <div class="step">
                             <span class="circle"></span>
-                            <span class="label">Fill Information</span>
+                            <span class="label"><i class="fas fa-user-edit"></i> Fill Information</span>
                         </div>
                     </div>
 
@@ -68,7 +73,7 @@
                         <div style="display: flex; gap:20px; margin-top: 10px">
                             <input type="date" id="date" name="bookingDate" value="<%=bookingDate%>" required>
                             <input type="time" id="time" name="bookingTime" value="<%=bookingTime%>" required>
-                            <button type="submit">Search table</button>
+                            <button type="submit"><i class="fas fa-search"></i> Search</button>
                         </div>
                     </div>
                 </form>
@@ -81,26 +86,27 @@
                         %>
                         <label>Select tables<span style="color: red;">*</span></label>
                         <div style="margin-top: 10px">
-                            <p style="font-style: italic; margin-bottom: 5px">List of available tables for <strong><%=bookingDate%></strong> at <strong><%=bookingTime%> - <%=endTime%></strong>:</p>
-
+                            <p style="font-style: italic; margin-bottom: 5px">List of available tables for <strong><%=outputFormatter.format(LocalDate.parse(bookingDate))%></strong> at <strong><%=bookingTime%> - <%=endTime%></strong>:</p>
+                            
+                            <div style="display: flex; flex-direction: column; min-height: 220px; justify-content: space-between;">
                             <table border="1" id="tableList">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Table name</th>
-                                        <th>Location</th>
-                                        <th>Capacity</th>
-                                        <th>Select</th>
+                                        <th style="width: 10%; text-align: center;">ID</th>
+                                        <th style="width: 25%; text-align: center;">Table name</th>
+                                        <th style="width: 50%; text-align: center;">Location</th>
+                                        <th style="width: 10%; text-align: center;">Capacity</th>
+                                        <th style="width: 5%; text-align: center;">Select</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <% for (Table table : tableList) {%>
                                     <tr>
-                                        <td><%= table.getId()%></td>
+                                        <td style="text-align: center"><%= table.getId()%></td>
                                         <td><%= table.getName()%></td>
                                         <td><%= table.getLocation()%></td>
-                                        <td><%= table.getCapacity()%></td>
-                                        <td>
+                                        <td style="text-align: center"><%= table.getCapacity()%></td>
+                                        <td style="text-align: center">
                                             <%
                                                 boolean isSelected = false;
                                                 if (selectedTableIds != null) {
@@ -118,6 +124,7 @@
                                     <% } %>
                                 </tbody>
                             </table>
+                                </div>
 
                             <div id="pagination"></div>
 
@@ -135,15 +142,15 @@
                             <div style="height: 2px; background-color: #e0e0e0; margin: 25px 0;"></div>
 
                             <div style="display: flex; justify-content: flex-start; align-items: center; margin-top: 20px; gap:20px;">
-                                <button type="button" onclick="window.location.href = 'MenuCustomerServlet'" class="btn-cancel">< Go back</button>
+                                <button type="button" onclick="window.location.href = 'MenuCustomerServlet'" class="btn-cancel"><i class="fas fa-arrow-left"></i> Go back</button>
                                 <%
                                     if ((tableList != null && tableList.isEmpty()) || bookingTime.isEmpty()) {
                                 %>
-                                <button type = "submit" name="action" value="loadReservationPage" disabled> Continue </button>
+                                <button type = "submit" name="action" value="loadReservationPage" disabled> Continue <i class="fas fa-arrow-right"></i></button>
                                 <%
                                 } else {
                                 %>
-                                <button type = "submit" name="action" value="loadReservationPage"> Continue </button>
+                                <button type = "submit" name="action" value="loadReservationPage"> Continue <i class="fas fa-arrow-right"></i></button>
                                 <%
                                     }
                                 %>

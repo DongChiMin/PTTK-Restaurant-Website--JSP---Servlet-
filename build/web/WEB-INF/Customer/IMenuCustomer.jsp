@@ -11,6 +11,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Menu Customer</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/Customer.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/all.min.css">
     </head>
     <body>
         <!-- Navbar -->
