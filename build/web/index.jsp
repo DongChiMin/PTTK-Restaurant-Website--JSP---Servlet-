@@ -28,13 +28,13 @@
         <div class="container">
             <div class="card left">
                 <form action="MenuManagerServlet" method="get">
-            <button type="submit">Module 1: tạo món ăn mới</button>
+            <button type="submit">Module 1: Create new dish</button>
         </form>
    
             </div>
             <div class="card right">
                      <form action="MenuCustomerServlet" method="get">
-            <button type="submit">Module 2: đặt bàn trực tuyến</button>
+            <button type="submit">Module 2: Book a table</button>
         </form>
             </div>
         </div>

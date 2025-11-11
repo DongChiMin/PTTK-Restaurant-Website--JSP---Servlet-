@@ -17,7 +17,7 @@
         <div class="admin-container"  style="background: white;">
             <!-- Sidebar -->
             <nav class="sidebar">
-                <h1 class="logo" style="text-align: center">Restman Admin</h1>
+                <a href="/RestaurantWeb"  class="logo" style="text-align: center">Restman Admin</a>
                 <ul>
                     <li><a href="MenuManagerServlet" class="active"><i class="fas fa-home"></i> Main menu</a></li>
                     <li><a href="ManageDishesServlet"> <i class="fas fa-utensils"></i> Manage Dishes</a></li>

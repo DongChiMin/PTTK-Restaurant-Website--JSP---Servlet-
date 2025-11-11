@@ -17,7 +17,7 @@
         <div class="admin-container"  style="background: white;">
             <!-- Sidebar -->
             <nav class="sidebar">
-                <h1 class="logo" style="text-align: center">Restman Admin</h1>
+                <a href="/RestaurantWeb"  class="logo" style="text-align: center">Restman Admin</a>
                 <ul>
                     <li><a href="MenuManagerServlet"><i class="fas fa-home"></i> Main menu</a></li>
                     <li><a href="ManageDishesServlet" class="active"> <i class="fas fa-utensils"></i> Manage Dishes</a></li>
@@ -62,10 +62,10 @@
                             <div style="display: flex; flex-direction: column; gap:10px; width: 100%;">
                                 <label>Category<span style="color: red;">*</span></label>
                                 <select name="category" required >
-                                    <option value="appetizer">Appetizer</option>
-                                    <option value="mainDish">Main Dish</option>
-                                    <option value="drink">Drink</option>
-                                    <option value="dessert">Dessert</option>
+                                    <option value="Appetizer">Appetizer</option>
+                                    <option value="MainDish">Main Dish</option>
+                                    <option value="Drink">Drink</option>
+                                    <option value="Dessert">Dessert</option>
                                 </select>
                             </div>
                         </div>
