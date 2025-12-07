@@ -19,6 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Bill;
 import model.Customer;
 import model.Reservation;
 import model.ReservationDetail;
@@ -65,9 +66,17 @@ public class CreateReservationServlet extends HttpServlet {
 
                 customer = customerDAO.getCustomerByPhone(phoneNumber);
                 request.setAttribute("customer", customer);
+                
+                List<Bill> billList = customerDAO.getBillById(customer);
+                
+                List<Reservation> reservationList = customerDAO.getReservationById(customer);
 
                 //Set trạng thái đã nhập sdt để JSP hiển thị thông tin
                 request.setAttribute("phoneNumberEntered", true);
+                request.setAttribute("billList", billList);
+                request.setAttribute("reservationList", reservationList);
+                
+                
             }
             case "reset" -> {
                 phoneNumber = "";

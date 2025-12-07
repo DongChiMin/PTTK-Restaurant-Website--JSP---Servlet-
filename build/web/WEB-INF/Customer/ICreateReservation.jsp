@@ -4,6 +4,8 @@
     Author     : namv2
 --%>
 
+<%@page import="model.Reservation"%>
+<%@page import="model.Bill"%>
 <%@page import="model.Customer"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="model.Table"%>
@@ -30,6 +32,9 @@
             String phoneNumber = (String) request.getAttribute("phoneNumber");
             Boolean phoneNumberEntered = (Boolean) request.getAttribute("phoneNumberEntered");
             String hiddenEmail = "";
+            
+            List<Bill> billList = (List<Bill>) request.getAttribute("billList");
+            List<Reservation> reservationList = (List<Reservation>) request.getAttribute("reservationList");
 
             if (phoneNumber == null) {
                 phoneNumber = "";
@@ -205,6 +210,30 @@
                         <label><i class="fa-solid fa-note-sticky" style="margin-top: 8px;"></i> Reservation note</label>
                         <div style="margin-top: 10px;">
                             <textarea name="note" style="width: 100%; height: 100px; resize: vertical; padding: 8px;"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label><i class="fa-solid fa-note-sticky" style="margin-top: 8px;"></i> Billing detail</label>
+                        <div style="margin-top: 10px;">
+                            <textarea name="billingDetail" style="width: 100%; height: 100px; resize: vertical; padding: 8px;" disabled >
+                                <%
+                                    float totalBill = 0;
+                                    for(Bill b : billList){
+                                        totalBill += b.getTotalPrice();
+                                    }
+                                %>
+Số lượng hóa đơn: <%= billList.size()%>
+tổng hóa đơn: <%= totalBill%>
+                                <%
+                                    for(Reservation r : reservationList){
+                                      
+                                    }
+%>
+Số lượng đơn đặt bàn: <%= reservationList.size()%>                                
+<%
+                                %>
+                            </textarea>
                         </div>
                     </div>
 

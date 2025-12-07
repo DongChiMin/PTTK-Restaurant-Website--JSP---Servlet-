@@ -10,9 +10,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Bill;
 import model.Customer;
+import model.Reservation;
 
 /**
  *
@@ -24,6 +28,56 @@ public class CustomerDAO {
 
     public CustomerDAO(Connection conn) {
         this.conn = conn;
+    }
+    
+    public List<Reservation> getReservationById(Customer customer){
+        String sql = """
+            SELECT r.*
+            FROM tblReservation r
+            WHERE r.tblCustomerid = ?
+                     """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customer.getId());
+            ResultSet rs = ps.executeQuery();
+            
+            List<Reservation> reservationList = new ArrayList<>();
+            while (rs.next()) {
+                Reservation reservation = new Reservation();
+                reservation.setId(rs.getInt("id"));
+
+                reservationList.add(reservation);
+            }
+            return reservationList;
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
+    public List<Bill> getBillById(Customer customer){
+        String sql = """
+            SELECT t.*
+            FROM tblBill t
+            WHERE t.tblCustomerid = ?
+                     """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customer.getId());
+            ResultSet rs = ps.executeQuery();
+            
+            List<Bill> billList = new ArrayList<>();
+            while (rs.next()) {
+                Bill bill = new Bill();
+                bill.setTotalPrice(rs.getFloat("totalPrice"));
+
+                billList.add(bill);
+            }
+            return billList;
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     //Lấy khách hàng theo số điện thoại định danh, nếu không tìm thấy (chưa tồn tại trong CSDL) thì trả null
